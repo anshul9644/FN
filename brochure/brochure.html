@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FreshNet Farms — Product Catalogue</title>
+<style>
+@font-face{font-family:"Fraunces";src:url(fonts/fraunces.woff2) format("woff2");font-weight:300 900;font-style:normal}
+@font-face{font-family:"Fraunces";src:url(fonts/fraunces-italic.woff2) format("woff2");font-weight:300 900;font-style:italic}
+@font-face{font-family:"Jakarta";src:url(fonts/jakarta.woff2) format("woff2");font-weight:300 800}
+
+:root{
+  --cocoa:#2B170B;
+  --brown:#5E3614;
+  --bark:#7A4A22;
+  --cream:#F8F2E7;
+  --sand:#EFE5D3;
+  --line:#E2D5BE;
+  --leaf:#8AB43F;
+  --leaf-dk:#3E6A1F;
+  --gold:#E2A42B;
+  --ink:#2B170B;
+  --muted:#6E5A49;
+}
+@page{size:A4;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#cfc6b8}
+body{font-family:"Jakarta",system-ui,sans-serif;color:var(--ink);font-size:9.6pt;line-height:1.55;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;position:relative;overflow:hidden;background:#fff;margin:0 auto 10mm;page-break-after:always;break-after:page}
+@media print{.page{margin:0}html,body{background:#fff}}
+img{display:block}
+.serif{font-family:"Fraunces",Georgia,serif}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:600;letter-spacing:-.01em;line-height:1.05}
+em{font-style:italic}
+
+/* ---------- shared chrome ---------- */
+.chrome-top{position:absolute;top:11mm;left:18mm;right:22mm;display:flex;align-items:center;justify-content:space-between}
+.chrome-top img{height:9.5mm}
+.chrome-top .crumb{font-size:7pt;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:flex;gap:3mm;align-items:center}
+.chrome-top .crumb b{color:var(--leaf-dk);font-weight:700}
+.chrome-top .crumb i{width:6mm;height:1px;background:var(--line);display:inline-block}
+.chrome-bot{position:absolute;bottom:9mm;left:18mm;right:22mm;display:flex;justify-content:space-between;font-size:6.8pt;color:var(--muted);letter-spacing:.06em;border-top:1px solid var(--line);padding-top:2.5mm}
+.chrome-bot .pn{font-family:"Fraunces";font-size:10pt;color:var(--brown);font-weight:600;letter-spacing:0}
+
+/* section index tabs on the right edge */
+.tab{position:absolute;right:0;width:9mm;height:52mm;background:var(--brown);color:var(--cream);display:flex;align-items:center;justify-content:center;border-radius:3mm 0 0 3mm}
+.tab span{transform:rotate(90deg);white-space:nowrap;font-size:6.6pt;letter-spacing:.3em;text-transform:uppercase;font-weight:700}
+.tab.t1{top:30mm}.tab.t2{top:88mm;background:var(--bark)}.tab.t3{top:146mm;background:var(--leaf-dk)}.tab.t4{top:204mm;background:#B07A1A}
+.tab-ghost{position:absolute;right:0;width:3mm;height:52mm;background:var(--sand);border-radius:2mm 0 0 2mm}
+
+.content{position:absolute;top:28mm;left:18mm;right:22mm;bottom:20mm}
+
+/* ---------- product blocks ---------- */
+.prod{display:grid;grid-template-columns:62mm 1fr;gap:8mm;align-items:center}
+.prod.rev{grid-template-columns:1fr 62mm}
+.prod.rev .ph{order:2}
+.ph{position:relative}
+.ph img{width:100%;height:52mm;object-fit:cover;border-radius:16mm 3mm 16mm 3mm;box-shadow:0 3mm 8mm -4mm rgba(43,23,11,.45)}
+.prod.rev .ph img{border-radius:3mm 16mm 3mm 16mm}
+.ph .num{position:absolute;top:-3mm;left:-3mm;width:11mm;height:11mm;border-radius:50%;background:var(--leaf);color:#fff;font-family:"Fraunces";font-weight:700;font-size:10pt;display:flex;align-items:center;justify-content:center;border:1mm solid #fff}
+.prod.rev .ph .num{left:auto;right:-3mm}
+.kicker{font-size:6.8pt;letter-spacing:.24em;text-transform:uppercase;color:var(--leaf-dk);font-weight:700;margin-bottom:1.5mm}
+.prod h2{font-size:19pt;color:var(--brown);margin-bottom:2mm}
+.hsn{display:inline-flex;align-items:center;gap:1.5mm;font-size:6.8pt;font-weight:700;letter-spacing:.08em;color:var(--brown);background:var(--sand);border-radius:10mm;padding:.8mm 2.6mm;margin-bottom:2.5mm}
+.hsn::before{content:"";width:1.6mm;height:1.6mm;border-radius:50%;background:var(--leaf)}
+.prod p{color:#3d2a1c;text-align:left}
+.meta{display:flex;flex-wrap:wrap;gap:2mm;margin-top:3mm}
+.chip{display:inline-flex;align-items:center;gap:1.6mm;font-size:7pt;font-weight:600;color:var(--leaf-dk);border:1px solid #cfe0b4;background:#F3F8EA;border-radius:10mm;padding:1mm 2.8mm}
+.chip svg{width:3.2mm;height:3.2mm}
+.chip.brown{color:var(--brown);border-color:var(--line);background:var(--cream)}
+.three .ph img{height:47mm}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--line) 15%,var(--line) 85%,transparent);margin:7mm 0}
+
+.note{margin-top:3mm;background:var(--cream);border-left:1.2mm solid var(--leaf);border-radius:0 2mm 2mm 0;padding:2.4mm 3.5mm;font-size:8.2pt}
+.note b{color:var(--leaf-dk);font-size:6.6pt;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:.6mm}
+
+/* ---------- tables ---------- */
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:7.6pt}
+th,td{padding:1.55mm 2mm;text-align:center}
+thead th{background:var(--brown);color:var(--cream);font-weight:700;letter-spacing:.04em}
+thead tr:first-child th:first-child{border-top-left-radius:3mm}
+thead tr:first-child th:last-child{border-top-right-radius:3mm}
+thead .grp th{background:var(--cocoa);font-size:6.6pt;letter-spacing:.22em;text-transform:uppercase;padding:1.2mm}
+thead .grp th.me{background:var(--bark)}
+thead .grp th.eu{background:var(--leaf-dk)}
+tbody td:first-child{text-align:left;font-weight:600;color:var(--brown)}
+tbody tr:nth-child(odd) td{background:var(--cream)}
+tbody td{border-bottom:1px solid #f0e8da}
+tbody td small{display:block;font-weight:400;color:var(--muted);font-size:6.2pt;line-height:1.2}
+.tbl-wrap{border-radius:3mm;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+
+/* ---------- cover ---------- */
+.cover{background:var(--cocoa);color:var(--cream)}
+.cover .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 40%}
+.cover .shade{position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(43,23,11,.0) 0%,rgba(43,23,11,0) 34%,rgba(43,23,11,.78) 58%,rgba(43,23,11,.97) 76%,#2B170B 100%),
+  radial-gradient(120mm 80mm at 0% 0%,rgba(248,242,231,.35),transparent 70%)}
+.cover .logo-card{position:absolute;top:0;left:16mm;background:#fff;padding:12mm 9mm 8mm;border-radius:0 0 8mm 8mm;box-shadow:0 6mm 14mm -8mm rgba(0,0,0,.5)}
+.cover .logo-card img{width:62mm}
+.cover .year{position:absolute;top:14mm;right:16mm;font-size:7pt;letter-spacing:.3em;text-transform:uppercase;background:rgba(43,23,11,.72);padding:2mm 4mm;border-radius:10mm;color:var(--cream)}
+.cover .stamp{position:absolute;top:96mm;right:14mm;width:40mm;height:40mm}
+.cover .txt{position:absolute;left:16mm;right:16mm;bottom:22mm}
+.cover .eyebrow{display:flex;align-items:center;gap:3mm;font-size:7.6pt;letter-spacing:.32em;text-transform:uppercase;color:var(--leaf);font-weight:700}
+.cover .eyebrow::before{content:"";width:12mm;height:1.4px;background:var(--leaf)}
+.cover h1{font-size:44pt;font-weight:500;margin:5mm 0 6mm;line-height:.98;letter-spacing:-.02em}
+.cover h1 em{color:var(--gold);font-weight:400}
+.cover .sub{display:flex;justify-content:space-between;align-items:flex-end;gap:8mm;border-top:1px solid rgba(248,242,231,.25);padding-top:5mm}
+.cover .sub .pc{font-family:"Fraunces";font-size:20pt;font-weight:300;line-height:1}
+.cover .sub .pc b{font-weight:700;color:var(--leaf)}
+.cover .cats{display:flex;flex-wrap:wrap;gap:1.6mm;justify-content:flex-end;max-width:100mm}
+.cover .cats span{font-size:6.8pt;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(248,242,231,.35);border-radius:10mm;padding:1mm 2.6mm}
+.cover .strip{position:absolute;left:0;right:0;bottom:0;height:5mm;background:linear-gradient(90deg,var(--leaf) 0 40%,var(--gold) 40% 62%,var(--bark) 62%)}
+
+/* ---------- about ---------- */
+.about{background:var(--cream)}
+.about .content{top:30mm}
+.big-quote{font-family:"Fraunces";font-size:23pt;font-weight:400;line-height:1.14;color:var(--brown);letter-spacing:-.01em;margin-bottom:7mm}
+.big-quote em{color:var(--leaf-dk)}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:8mm}
+.about p{color:#3d2a1c;margin-bottom:2.5mm}
+.chain{margin:8mm 0 7mm;background:#fff;border-radius:5mm;padding:6mm 5mm 5mm;box-shadow:0 0 0 1px var(--line)}
+.chain h3,.focus h3,.stats-h{font-family:"Jakarta";font-size:6.8pt;letter-spacing:.26em;text-transform:uppercase;color:var(--leaf-dk);font-weight:800;margin-bottom:4.5mm}
+.nodes{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
+.nodes::before{content:"";position:absolute;top:7mm;left:10%;right:10%;height:0;border-top:1.4px dashed var(--leaf)}
+.node{text-align:center;position:relative}
+.node .ic{width:14mm;height:14mm;margin:0 auto 2.2mm;border-radius:50%;background:var(--brown);display:flex;align-items:center;justify-content:center;color:var(--cream);position:relative;z-index:1;box-shadow:0 0 0 1.4mm #fff}
+.node:last-child .ic{background:var(--leaf)}
+.node .ic svg{width:7mm;height:7mm}
+.node b{display:block;font-size:7.8pt;color:var(--brown)}
+.node small{font-size:6.6pt;color:var(--muted);line-height:1.3;display:block;margin-top:.5mm}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.stat{background:var(--brown);color:var(--cream);border-radius:4mm;padding:4.5mm 4mm}
+.stat:nth-child(2){background:var(--leaf-dk)}
+.stat:nth-child(3){background:var(--bark)}
+.stat:nth-child(4){background:#B07A1A}
+.stat .v{font-family:"Fraunces";font-size:24pt;font-weight:600;line-height:1}
+.stat .v sup{font-size:12pt}
+.stat .l{font-size:7pt;line-height:1.35;margin-top:1.6mm;opacity:.9}
+.focus{margin-top:7mm}
+.focus .row{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm}
+.fcard{background:#fff;border-radius:4mm;padding:3.5mm;box-shadow:0 0 0 1px var(--line)}
+.fcard b{font-family:"Fraunces";font-size:11.5pt;color:var(--brown);font-weight:600;display:block;margin-bottom:1mm}
+.fcard span{font-size:7.4pt;color:var(--muted);line-height:1.4;display:block}
+.fcard i{display:block;width:8mm;height:1.2mm;border-radius:1mm;background:var(--leaf);margin-bottom:2.5mm}
+
+/* ---------- leadership + index ---------- */
+.leader{display:grid;grid-template-columns:24mm 1fr;gap:6mm;margin-bottom:5mm}
+.mono{width:24mm;height:24mm;border-radius:50%;background:var(--brown);color:var(--cream);font-family:"Fraunces";font-size:17pt;font-weight:600;display:flex;align-items:center;justify-content:center;position:relative}
+.mono::after{content:"";position:absolute;inset:-1.6mm;border-radius:50%;border:1.2px dashed var(--leaf)}
+.mono.g{background:var(--leaf-dk)}
+.leader h2{font-size:17pt;color:var(--brown)}
+.leader .role{font-size:7pt;letter-spacing:.24em;text-transform:uppercase;color:var(--leaf-dk);font-weight:700;margin:1mm 0 2.5mm}
+.leader p{color:#3d2a1c;font-size:8.8pt}
+.tags{display:flex;flex-wrap:wrap;gap:1.4mm;margin-top:2.6mm}
+.tags span{font-size:6.6pt;font-weight:600;color:var(--brown);background:var(--sand);border-radius:1.5mm;padding:.7mm 2mm}
+.sec-h{display:flex;align-items:baseline;gap:4mm;margin-bottom:5mm}
+.sec-h h2{font-size:24pt;color:var(--brown);font-weight:500}
+.sec-h h2 em{color:var(--leaf-dk)}
+.sec-h .ln{flex:1;height:1px;background:var(--line)}
+.index{display:grid;grid-template-columns:repeat(5,1fr);gap:2.6mm 3mm}
+.ix{text-align:center}
+.ix img{width:17mm;height:17mm;border-radius:50%;object-fit:cover;margin:0 auto 1.6mm;box-shadow:0 0 0 1mm #fff,0 0 0 1.3mm var(--line)}
+.ix b{display:block;font-size:7pt;line-height:1.2;color:var(--brown);font-weight:700}
+.ix span{font-size:6.4pt;color:var(--muted)}
+
+/* ---------- dividers ---------- */
+.opener{background:var(--cocoa);color:var(--cream)}
+.opener .mosaic{position:absolute;top:30mm;left:16mm;right:16mm;height:150mm;display:grid;grid-template-columns:1.25fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:3mm}
+.opener .mosaic img{width:100%;height:100%;object-fit:cover;border-radius:4mm}
+.opener .mosaic img:first-child{grid-row:span 2;border-radius:30mm 4mm 4mm 4mm}
+.opener .fade{position:absolute;top:120mm;left:0;right:0;height:62mm;background:linear-gradient(180deg,rgba(43,23,11,0),rgba(43,23,11,.9) 70%,var(--cocoa))}
+.opener .no{position:absolute;left:16mm;top:150mm;font-family:"Fraunces";font-size:120pt;font-weight:300;line-height:.8;color:transparent;-webkit-text-stroke:1.2px var(--leaf)}
+.opener .body{position:absolute;left:16mm;right:20mm;top:196mm}
+.opener h1{font-size:40pt;font-weight:500;line-height:1}
+.opener h1 em{color:var(--gold);font-weight:400}
+.opener p{max-width:120mm;margin-top:5mm;font-size:10pt;line-height:1.55;color:#e8dccb}
+.opener .list{position:absolute;left:16mm;right:20mm;bottom:16mm;display:flex;flex-wrap:wrap;gap:1.6mm}
+.opener .list span{font-size:6.8pt;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(248,242,231,.3);border-radius:10mm;padding:1mm 2.6mm}
+.opener .logo{position:absolute;top:12mm;left:16mm;height:12mm}
+
+/* ---------- gallery ---------- */
+.gallery{display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:31mm 31mm;gap:2.5mm;margin:4mm 0 6mm}
+.gallery img{width:100%;height:100%;object-fit:cover;border-radius:3mm}
+.gallery img:first-child{grid-row:span 2;border-radius:12mm 3mm 3mm 3mm}
+.gallery.g3{grid-template-columns:1.4fr 1fr 1fr;grid-template-rows:44mm}
+.gallery.g3 img:first-child{grid-row:auto}
+
+.lead{font-size:10.2pt;line-height:1.55;color:#3d2a1c;max-width:150mm}
+.ph-title{display:flex;align-items:flex-end;justify-content:space-between;gap:6mm}
+.ph-title h2{font-size:28pt;color:var(--brown);font-weight:600}
+.subh{font-family:"Jakarta";font-size:7pt;letter-spacing:.26em;text-transform:uppercase;color:var(--leaf-dk);font-weight:800;margin:0 0 3mm;display:flex;align-items:center;gap:3mm}
+.subh::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* spec tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:2.4mm}
+.tile{background:var(--cream);border-radius:3mm;padding:2.8mm 3mm;border:1px solid var(--line)}
+.tile .v{font-family:"Fraunces";font-size:13pt;font-weight:600;color:var(--brown);line-height:1.1}
+.tile .l{font-size:6.4pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.8mm;font-weight:600}
+.tile.hl{background:var(--leaf-dk);border-color:var(--leaf-dk)}
+.tile.hl .v{color:#fff}.tile.hl .l{color:#d7e8c0}
+
+/* grades */
+.grades{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:2mm;align-items:center}
+.grades .h{font-weight:700;color:var(--brown);font-size:8pt;padding-right:3mm}
+.grades .g{text-align:center;border-radius:2mm;padding:1.8mm 0;font-family:"Fraunces";font-weight:700;font-size:11pt;background:var(--sand);color:var(--brown)}
+.grades .g.a3{background:var(--leaf-dk);color:#fff}
+.grades .g.a2{background:var(--leaf);color:#fff}
+
+/* pulses */
+.pulse{display:grid;grid-template-columns:58mm 1fr;gap:7mm;height:117mm}
+.pulse .pics{position:relative}
+.pulse .pics img{position:absolute;object-fit:cover;border-radius:50%;box-shadow:0 0 0 1.4mm #fff,0 4mm 10mm -5mm rgba(43,23,11,.6)}
+.pulse .pics .a{width:50mm;height:50mm;top:6mm;left:0}
+.pulse .pics .b{width:36mm;height:36mm;top:50mm;left:22mm}
+.pulse .pics .aka{position:absolute;left:0;top:92mm;right:2mm;font-size:7pt;color:var(--muted);line-height:1.4}
+.pulse .pics .aka b{display:block;font-size:6.4pt;letter-spacing:.22em;text-transform:uppercase;color:var(--leaf-dk);margin-bottom:.6mm}
+.pulse h2{font-size:22pt;color:var(--brown);margin-bottom:2mm}
+.pulse p{font-size:8.6pt;color:#3d2a1c}
+.nutri{margin:3.5mm 0 3mm;background:var(--cream);border-radius:3mm;padding:3mm 4mm 2.6mm}
+.nutri .t{display:flex;justify-content:space-between;font-size:6.4pt;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--leaf-dk);margin-bottom:2mm}
+.nutri .t span{color:var(--muted);letter-spacing:.08em;font-weight:600}
+.bar{display:grid;grid-template-columns:20mm 1fr 15mm;align-items:center;gap:2.5mm;margin-bottom:1.5mm;font-size:7.4pt}
+.bar .lbl{color:var(--brown);font-weight:600}
+.bar .trk{height:2.6mm;border-radius:2mm;background:#e8dcc6;position:relative;overflow:hidden}
+.bar .trk i{position:absolute;top:0;bottom:0;left:0;border-radius:2mm;background:var(--brown)}
+.bar .trk i.r{background:rgba(94,54,20,.35)}
+.bar.p .trk i{background:var(--leaf-dk)}
+.bar.p .trk i.r{background:rgba(62,106,31,.35)}
+.bar .val{text-align:right;font-weight:700;color:var(--brown)}
+.rich{font-size:7.6pt;color:var(--muted);margin-top:1.5mm}
+.rich b{color:var(--brown)}
+.uses{display:flex;flex-wrap:wrap;gap:1.4mm;margin-top:2.4mm}
+.uses span{font-size:6.8pt;font-weight:600;color:var(--brown);background:#fff;border:1px solid var(--line);border-radius:10mm;padding:.6mm 2.4mm}
+
+/* ---------- back cover ---------- */
+.back{background:var(--cocoa);color:var(--cream)}
+.back .glow{position:absolute;width:230mm;height:230mm;border-radius:50%;left:-20mm;top:-70mm;background:radial-gradient(circle,rgba(138,180,63,.22),transparent 62%)}
+.back .logo{position:absolute;top:30mm;left:0;right:0;margin:0 auto;width:96mm}
+.back .cta{position:absolute;top:80mm;left:18mm;right:18mm;text-align:center}
+.back .cta h2{font-size:32pt;font-weight:400;line-height:1.05}
+.back .cta h2 em{color:var(--gold)}
+.back .cta p{margin:4mm auto 0;max-width:130mm;color:#dccfbd;font-size:9.6pt}
+.back .sites{position:absolute;left:16mm;right:16mm;top:140mm;display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+.site{border:1px solid rgba(248,242,231,.18);background:rgba(248,242,231,.05);border-radius:5mm;padding:5mm 4.5mm}
+.site .ic{width:9mm;height:9mm;border-radius:50%;background:var(--leaf);display:flex;align-items:center;justify-content:center;margin-bottom:3mm}
+.site .ic svg{width:4.6mm;height:4.6mm;color:var(--cocoa)}
+.site b{display:block;font-size:6.8pt;letter-spacing:.22em;text-transform:uppercase;color:var(--leaf);margin-bottom:2mm}
+.site p{font-size:8.2pt;line-height:1.5;color:#efe6d8}
+.site .ph{margin-top:2.5mm;font-weight:700;color:#fff;font-size:8.6pt}
+.back .contact{position:absolute;left:16mm;right:16mm;top:214mm;display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.back .contact>div{background:var(--leaf);color:var(--cocoa);border-radius:5mm;padding:5mm 6mm;display:flex;align-items:center;gap:4mm}
+.back .contact>div:last-child{background:var(--gold)}
+.back .contact svg{width:8mm;height:8mm;flex:none}
+.back .contact small{display:block;font-size:6.4pt;letter-spacing:.24em;text-transform:uppercase;font-weight:800;opacity:.75}
+.back .contact span{font-family:"Fraunces";font-size:13.5pt;font-weight:600;white-space:nowrap}
+.back .contact small{margin-bottom:.6mm}
+.back .legal{position:absolute;left:16mm;right:16mm;bottom:16mm;text-align:center;font-size:7pt;letter-spacing:.3em;text-transform:uppercase;color:#bfae98}
+.back .strip{position:absolute;left:0;right:0;bottom:0;height:5mm;background:linear-gradient(90deg,var(--leaf) 0 40%,var(--gold) 40% 62%,var(--bark) 62%)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-6 7-10 16-10 0 9-4 16-10 16z"/><path d="M4 21c4-5 7-8 11-11"/></symbol>
+  <symbol id="i-farmer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M12 12c0-4 3-7 7-7 0 4-3 7-7 7zM12 15c0-3-2.5-5.5-6-5.5 0 3 2.5 5.5 6 5.5z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.6 0 4.5 1.9 4.5 4.5"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5 21v-3a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v3"/><path d="M8.5 5.5h7"/></symbol>
+  <symbol id="i-factory" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V10l6 4V10l6 4V5h6v16z"/><path d="M7 17h2M12 17h2M17 17h2"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></symbol>
+</svg>
+
+<!-- ======================= 1 · COVER ======================= -->
+<section class="page cover">
+  <img class="bg" src="img/hero.jpg" alt="">
+  <div class="shade"></div>
+  <div class="logo-card"><img src="img/logo.png" alt="FreshNet Farms"></div>
+  <div class="year">Product Catalogue · 2026</div>
+
+  <svg class="stamp" viewBox="0 0 200 200">
+    <defs><path id="circ" d="M100,100 m-76,0 a76,76 0 1,1 152,0 a76,76 0 1,1 -152,0"/></defs>
+    <circle cx="100" cy="100" r="98" fill="#8AB43F"/>
+    <circle cx="100" cy="100" r="60" fill="none" stroke="#fff" stroke-opacity=".5" stroke-dasharray="2 4"/>
+    <text font-family="Jakarta" font-size="15.5" font-weight="800" letter-spacing="4.2" fill="#2B170B"><textPath href="#circ">FARM DIRECT · EXPORT READY · 365 DAYS ·</textPath></text>
+    <text x="100" y="94" text-anchor="middle" font-family="Fraunces" font-size="30" font-weight="700" fill="#fff">20</text>
+    <text x="100" y="116" text-anchor="middle" font-family="Jakarta" font-size="11" font-weight="800" letter-spacing="2" fill="#2B170B">PRODUCTS</text>
+  </svg>
+
+  <div class="txt">
+    <div class="eyebrow">Building global markets for Indian farmers</div>
+    <h1 class="serif">From India’s farms<br>to the <em>world’s tables.</em></h1>
+    <div class="sub">
+      <div class="pc">Product <b>Catalogue</b></div>
+      <div class="cats"><span>Coconut</span><span>Coco Peat</span><span>Spices</span><span>Coffee</span><span>Pulses</span></div>
+    </div>
+  </div>
+  <div class="strip"></div>
+</section>
+
+<!-- ======================= 2 · ABOUT ======================= -->
+<section class="page about">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>About us</b><i></i>Who we are</div></div>
+  <div class="tab-ghost" style="top:30mm"></div>
+  <div class="content">
+    <div class="kicker">FreshNet Farms Pvt Ltd</div>
+    <p class="big-quote">A food-crop value chain enterprise building a <em>global marketplace</em> for India’s small-holding farmers.</p>
+    <div class="cols2">
+      <div>
+        <p>We work closely with small-holding farmers, aggregators, harvesters and processors to add significant value at every node of the supply chain — for stakeholders in India and for buyers around the world.</p>
+        <p>Being very close to the farms lets us make a real impact on productivity and post-harvest processes, raising farmers’ income on a per-unit basis.</p>
+      </div>
+      <div>
+        <p>Along the chain we generate employment for landless workers and help them become skilled workers — improving capability and standard of living.</p>
+        <p>Today our focus is coconut and its value-added products, spices, coffee beans, pulses and major fruits.</p>
+      </div>
+    </div>
+
+    <div class="chain">
+      <h3>Our value chain</h3>
+      <div class="nodes">
+        <div class="node"><div class="ic"><svg><use href="#i-farmer"/></svg></div><b>Farmers</b><small>Small-holding growers</small></div>
+        <div class="node"><div class="ic"><svg><use href="#i-users"/></svg></div><b>Aggregators</b><small>Village-level sourcing</small></div>
+        <div class="node"><div class="ic"><svg><use href="#i-hand"/></svg></div><b>Harvesters</b><small>Skilled field workforce</small></div>
+        <div class="node"><div class="ic"><svg><use href="#i-factory"/></svg></div><b>Processors</b><small>Packhouse &amp; processing unit</small></div>
+        <div class="node"><div class="ic"><svg><use href="#i-globe"/></svg></div><b>Global buyers</b><small>Middle East · EU · beyond</small></div>
+      </div>
+    </div>
+
+    <div class="stats-h" style="font-size:6.8pt;letter-spacing:.26em;text-transform:uppercase;color:var(--leaf-dk);font-weight:800;margin-bottom:4.5mm">At a glance</div>
+    <div class="stats">
+      <div class="stat"><div class="v">20</div><div class="l">Products across coconut, coco peat, spices, coffee &amp; pulses</div></div>
+      <div class="stat"><div class="v">365</div><div class="l">Days a year availability on our coconut range</div></div>
+      <div class="stat"><div class="v">3</div><div class="l">Sites in Tamil Nadu — office, export packhouse &amp; processing unit</div></div>
+      <div class="stat"><div class="v">15<sup>+</sup></div><div class="l">Years of founder experience in agribusiness &amp; supply chains</div></div>
+    </div>
+
+    <div class="focus">
+      <h3>What we grow &amp; trade</h3>
+      <div class="row">
+        <div class="fcard"><i></i><b>Coconut</b><span>Whole nuts, copra, oils, milk, sugar, flour &amp; powders</span></div>
+        <div class="fcard"><i style="background:var(--gold)"></i><b>Spices</b><span>Turmeric, red chilli &amp; pepper</span></div>
+        <div class="fcard"><i style="background:var(--bark)"></i><b>Coffee</b><span>Arabica &amp; Robusta green beans</span></div>
+        <div class="fcard"><i style="background:var(--leaf-dk)"></i><b>Fruits &amp; pulses</b><span>Banana, grapes, pomegranate · toor, moong, chana, urad</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">02</span></div>
+</section>
+
+<!-- ======================= 3 · LEADERSHIP + INDEX ======================= -->
+<section class="page">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>About us</b><i></i>Leadership &amp; portfolio</div></div>
+  <div class="tab-ghost" style="top:30mm"></div>
+  <div class="content">
+    <div class="sec-h"><h2>The people <em>behind it</em></h2><div class="ln"></div></div>
+
+    <div class="leader">
+      <div class="mono">SK</div>
+      <div>
+        <h2>Senthil Kumar</h2>
+        <div class="role">Founder &amp; CEO</div>
+        <p>15 years of professional and entrepreneurial experience in agribusiness strategy &amp; consulting, agricultural R&amp;D, international project management, operations, farm procurement &amp; supply chain, agri-input marketing, product management and ICS business across Asia-Pacific. An MBA in Agribusiness from TNAU, Senthil has now ventured into the coconut value chain for global markets.</p>
+        <div class="tags"><span>Sathguru Management Consultants</span><span>IFPRI</span><span>Syngenta</span><span>Innoterra</span><span>Cornell University</span><span>USAID</span><span>World Bank</span><span>DBT</span><span>MoFPI</span><span>CGIAR</span><span>NARS</span><span>SAUs</span><span>ICICI &amp; Tata Foundations</span><span>NGOs &amp; farmer associations</span></div>
+      </div>
+    </div>
+
+    <div class="leader" style="margin-bottom:6mm">
+      <div class="mono g">AG</div>
+      <div>
+        <h2>Abinaya Guhan</h2>
+        <div class="role">Director</div>
+        <p>5 years of professional and entrepreneurial experience in people and organisation development. A graduate of Ethiraj College, Chennai, she also practises nutrition and dietetics and is passionate about women’s empowerment, public health and lifting people out of poverty.</p>
+      </div>
+    </div>
+
+    <div class="sec-h" style="margin-bottom:4.5mm"><h2>Our <em>portfolio</em></h2><div class="ln"></div></div>
+    <div class="index">
+      <div class="ix"><img src="img/shc-4.jpg"><b>Semi-Husked Coconut</b><span>p. 05</span></div>
+      <div class="ix"><img src="img/copra-1.jpg"><b>Copra</b><span>p. 06</span></div>
+      <div class="ix"><img src="img/oil.jpg"><b>Coconut Oil</b><span>p. 06</span></div>
+      <div class="ix"><img src="img/milk.jpg"><b>Coconut Milk</b><span>p. 06</span></div>
+      <div class="ix"><img src="img/sugar.jpg"><b>Coconut Sugar</b><span>p. 07</span></div>
+      <div class="ix"><img src="img/desiccated.jpg"><b>Desiccated Coconut</b><span>p. 07</span></div>
+      <div class="ix"><img src="img/flour.jpg"><b>Coconut Flour</b><span>p. 07</span></div>
+      <div class="ix"><img src="img/milkpowder.jpg"><b>Coconut Milk Powder</b><span>p. 08</span></div>
+      <div class="ix"><img src="img/butter.jpg"><b>Coconut Butter</b><span>p. 08</span></div>
+      <div class="ix"><img src="img/vco.jpg"><b>Extra Virgin Coconut Oil</b><span>p. 08</span></div>
+      <div class="ix"><img src="img/mct.jpg"><b>Coconut MCT Oil</b><span>p. 09</span></div>
+      <div class="ix"><img src="img/testa.jpg"><b>Coconut Testa Oil</b><span>p. 09</span></div>
+      <div class="ix"><img src="img/cwp.jpg"><b>Coconut Water Powder</b><span>p. 09</span></div>
+      <div class="ix"><img src="img/peat-1.jpg"><b>Cocopeat</b><span>p. 10</span></div>
+      <div class="ix"><img src="img/turmeric-1.jpg"><b>Turmeric Finger</b><span>p. 12</span></div>
+      <div class="ix"><img src="img/coffee-2.jpg"><b>Green Coffee Beans</b><span>p. 12</span></div>
+      <div class="ix"><img src="img/toor-2.jpg"><b>Toor Dal</b><span>p. 13</span></div>
+      <div class="ix"><img src="img/moong-2.jpg"><b>Moong Dal</b><span>p. 13</span></div>
+      <div class="ix"><img src="img/bengal-2.jpg"><b>Bengal Gram</b><span>p. 14</span></div>
+      <div class="ix"><img src="img/urad-2.jpg"><b>Urad Dal</b><span>p. 14</span></div>
+    </div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">03</span></div>
+</section>
+
+<!-- ======================= 4 · OPENER: COCONUT ======================= -->
+<section class="page opener">
+  <div class="mosaic"><img src="img/milk.jpg"><img src="img/oil.jpg"><img src="img/sugar.jpg"><img src="img/vco.jpg"><img src="img/desiccated.jpg"></div>
+  <div class="fade"></div>
+  <img class="logo" src="img/logo-light.png" alt="">
+  <div class="no">01</div>
+  <div class="body">
+    <h1>The Coconut <em>Collection</em></h1>
+    <p>Thirteen products from one remarkable palm — sourced from the coconut belt of Pollachi and Krishnagiri, graded at our own export packhouse and available all year round.</p>
+  </div>
+  <div class="list"><span>Semi-husked coconut</span><span>Copra</span><span>Coconut oil</span><span>Milk</span><span>Sugar</span><span>Desiccated</span><span>Flour</span><span>Milk powder</span><span>Butter</span><span>VCO</span><span>MCT oil</span><span>Testa oil</span><span>Water powder</span></div>
+</section>
+
+<!-- ======================= 5 · SEMI HUSKED ======================= -->
+<section class="page">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>01 · Coconut</b><i></i>Whole nuts</div></div>
+  <div class="tab t1"><span>Coconut</span></div>
+  <div class="content">
+    <div class="kicker">Flagship export</div>
+    <div class="ph-title"><h2>Semi-Husked Coconut</h2><span class="hsn" style="margin-bottom:2mm">HSN 08011910</span></div>
+    <p class="lead" style="margin-top:2mm">A household staple across the world — and exported from India to the Middle East and Europe throughout the year.</p>
+    <div class="gallery" style="grid-template-rows:40mm 40mm">
+      <img src="img/shc-1.jpg"><img src="img/shc-2.jpg"><img src="img/shc-3.jpg"><img src="img/shc-5.jpg"><img src="img/shc-6.jpg">
+    </div>
+    <div class="subh">Quality specifications</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr class="grp"><th style="background:var(--cocoa)"></th><th class="me" colspan="3">Middle East</th><th class="eu" colspan="2">European Union</th></tr>
+        <tr><th style="text-align:left">Bag type</th><th>13</th><th>15</th><th>17</th><th>22.5</th><th>22.5</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Coconut type</td><td>Semi-husked</td><td>Semi-husked</td><td>Semi-husked</td><td>De-husked</td><td>De-husked</td></tr>
+        <tr><td>Number of bags</td><td>2,200</td><td>1,900</td><td>1,680</td><td>1,080</td><td>1,080</td></tr>
+        <tr><td>Size (min – max)</td><td>400 – 700</td><td>450 – 750</td><td>500 – 850</td><td>450 – 550</td><td>350 – 550</td></tr>
+        <tr><td>Nuts per bag</td><td>25</td><td>25</td><td>25</td><td>40</td><td>50</td></tr>
+        <tr><td>Average gram per nut</td><td>550</td><td>600</td><td>675</td><td>550</td><td>450</td></tr>
+        <tr><td>Colour</td><td>Biscuit / Brown</td><td>Brown</td><td>Brown</td><td>Brown</td><td>Brown</td></tr>
+        <tr><td>Type of bag</td><td>PP bag</td><td>PP bag</td><td>PP bag</td><td>PP bag</td><td>PP bag</td></tr>
+        <tr><td>Total volume (kg)</td><td>28,600</td><td>28,500</td><td>28,650</td><td>24,300</td><td>24,300</td></tr>
+        <tr><td>Harvesting days<small>from tree (maturity index)</small></td><td>60 days</td><td>60 days</td><td>60 days</td><td>60 days</td><td>60 days</td></tr>
+        <tr><td>Curing after harvest</td><td>15–30 days</td><td>15–30 days</td><td>15–30 days</td><td>20 days</td><td>20 days</td></tr>
+        <tr><td>Shelf life<small>after packing (max. stocking period)</small></td><td>45–60 days</td><td>45–60 days</td><td>45–60 days</td><td>60 days</td><td>60 days</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="meta"><span class="chip"><svg><use href="#i-cal"/></svg>Available 365 days</span><span class="chip brown"><svg><use href="#i-globe"/></svg>Middle East &amp; EU grades</span></div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">05</span></div>
+</section>
+
+<!-- ======================= 6 · COPRA / OIL / MILK ======================= -->
+<section class="page">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>01 · Coconut</b><i></i>Copra, oil &amp; milk</div></div>
+  <div class="tab t1"><span>Coconut</span></div>
+  <div class="content">
+    <div class="kicker">Dried kernel</div>
+    <div class="ph-title"><h2>Copra</h2><span class="hsn" style="margin-bottom:2mm">HSN 08011920</span></div>
+    <p class="lead" style="margin-top:1.5mm">The dried, white flesh of the coconut — the raw material from which coconut oil is extracted.</p>
+    <div class="gallery g3" style="grid-template-rows:38mm;margin-bottom:3mm"><img src="img/copra-1.jpg"><img src="img/copra-2.jpg"><img src="img/copra-3.jpg"></div>
+    <div class="meta" style="margin-top:0"><span class="chip"><svg><use href="#i-cal"/></svg>Available 365 days</span><span class="chip brown"><svg><use href="#i-box"/></svg>1 kg · 5 kg · 20 kg · 25 kg · 50 kg — PP &amp; gunny bags</span></div>
+
+    <div class="divider" style="margin:6mm 0"></div>
+
+    <div class="prod rev">
+      <div class="ph"><img src="img/oil.jpg" style="height:48mm"><span class="num">02</span></div>
+      <div>
+        <div class="kicker">Edible oil</div>
+        <h2>Coconut Oil</h2>
+        <span class="hsn">HSN 15131900</span>
+        <p>An edible oil pressed from the kernel of the coconut palm fruit. A white, solid fat below around 25 °C and a clear, thin liquid in warmer climates. Unrefined varieties carry a distinct coconut aroma.</p>
+        <div class="meta"><span class="chip"><svg><use href="#i-cal"/></svg>365 days</span><span class="chip brown"><svg><use href="#i-box"/></svg>500 ml – 15 litre</span></div>
+      </div>
+    </div>
+
+    <div class="divider" style="margin:6mm 0"></div>
+
+    <div class="prod">
+      <div class="ph"><img src="img/milk.jpg" style="height:48mm"><span class="num">03</span></div>
+      <div>
+        <div class="kicker">Rich &amp; creamy</div>
+        <h2>Coconut Milk</h2>
+        <span class="hsn">HSN 08011990</span>
+        <p>An opaque, milky-white liquid extracted from the grated pulp of mature coconuts. Its richness comes from its high oil content — a traditional ingredient across South &amp; Southeast Asia, Oceania and East Africa.</p>
+        <div class="meta"><span class="chip"><svg><use href="#i-cal"/></svg>365 days</span><span class="chip brown"><svg><use href="#i-box"/></svg>100 ml – 1 litre</span></div>
+      </div>
+    </div>
+    <div class="note"><b>Health benefits</b>May enhance metabolism, improve digestion, act as an antioxidant and help protect against viral, fungal and bacterial infections.</div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">06</span></div>
+</section>
+
+<!-- ======================= 7 · SUGAR / DESICCATED / FLOUR ======================= -->
+<section class="page">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>01 · Coconut</b><i></i>Sugar, desiccated &amp; flour</div></div>
+  <div class="tab t1"><span>Coconut</span></div>
+  <div class="content three" style="display:flex;flex-direction:column;justify-content:space-around;padding:2mm 0 6mm">
+    <div class="prod">
+      <div class="ph"><img src="img/sugar.jpg"><span class="num">04</span></div>
+      <div>
+        <div class="kicker">Natural sweetener</div>
+        <h2>Coconut Sugar</h2>
+        <span class="hsn">HSN 21069060</span>
+        <p>A palm sugar made from the sap of the coconut flower-bud stem. Raw and unrefined, it retains natural nutrients such as iron and magnesium — golden in colour, honey-like in taste and free of chemicals and pesticides.</p>
+        <div class="meta"><span class="chip"><svg><use href="#i-cal"/></svg>365 days</span><span class="chip brown"><svg><use href="#i-box"/></svg>100 g · 200 g · 400 g · 500 g · 750 g · 1 kg</span></div>
+      </div>
+    </div>
+    <div class="divider" style="margin:0"></div>
+    <div class="prod rev">
+      <div class="ph"><img src="img/desiccated.jpg"><span class="num">05</span></div>
+      <div>
+        <div class="kicker">Bakery &amp; confectionery</div>
+        <h2>Desiccated Coconut Powder</h2>
+        <span class="hsn">HSN 12030000</span>
+        <p>Obtained by drying ground or shredded coconut kernels after browning tests. Widely used in confectionery, puddings and many other food preparations as a substitute for raw grated coconut.</p>
+        <div class="meta"><span class="chip"><svg><use href="#i-cal"/></svg>365 days</span><span class="chip brown"><svg><use href="#i-box"/></svg>500 kg to 25 kg bag</span></div>
+      </div>
+    </div>
+    <div class="divider" style="margin:0"></div>
+    <div class="prod">
+      <div class="ph"><img src="img/flour.jpg"><span class="num">06</span></div>
+      <div>
+        <div class="kicker">Gluten-free</div>
+        <h2>Coconut Flour</h2>
+        <span class="hsn">HSN 11063090</span>
+        <p>Made by grinding dried coconut meat into a fine powder. Popular for gluten-free and grain-free diets — a direct substitute for other flours in bread, pancakes, cookies and muffins.</p>
+        <div class="meta"><span class="chip"><svg><use href="#i-cal"/></svg>365 days</span><span class="chip brown"><svg><use href="#i-box"/></svg>500 kg to 25 kg bag</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">07</span></div>
+</section>
+
+<!-- ======================= 8 · MILK POWDER / BUTTER / VCO ======================= -->
+<section class="page">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>01 · Coconut</b><i></i>Value-added</div></div>
+  <div class="tab t1"><span>Coconut</span></div>
+  <div class="content three" style="display:flex;flex-direction:column;justify-content:space-around;padding:2mm 0 6mm">
+    <div class="prod">
+      <div class="ph"><img src="img/milkpowder.jpg"><span class="num">07</span></div>
+      <div>
+        <div class="kicker">Shelf-stable</div>
+        <h2>Coconut Milk Powder</h2>
+        <p>A dehydrated form of coconut milk, spray-dried into a fine white powder that reconstitutes simply with water. A convenient alternative to canned or fresh coconut milk with a longer shelf life and easy storage.</p>
+        <div class="meta"><span class="chip"><svg><use href="#i-leaf"/></svg>Spray-dried</span><span class="chip brown"><svg><use href="#i-box"/></svg>Long shelf life</span></div>
+      </div>
+    </div>
+    <div class="divider" style="margin:0"></div>
+    <div class="prod rev">
+      <div class="ph"><img src="img/butter.jpg"><span class="num">08</span></div>
+      <div>
+        <div class="kicker">Whole-food spread</div>
+        <h2>Coconut Butter</h2>
+        <p>A semi-solid, white, creamy paste made from the dehydrated pulp of mature coconuts. Pureed into a smooth, spreadable consistency, this nutrient-rich, slightly sweet spread contains both coconut oil and fibre.</p>
+        <div class="meta"><span class="chip"><svg><use href="#i-leaf"/></svg>Oil + fibre</span><span class="chip brown"><svg><use href="#i-box"/></svg>Whole-food product</span></div>
+      </div>
+    </div>
+    <div class="divider" style="margin:0"></div>
+    <div class="prod">
+      <div class="ph"><img src="img/vco.jpg"><span class="num">09</span></div>
+      <div>
+        <div class="kicker">Cold-pressed</div>
+        <h2>Extra Virgin Coconut Oil</h2>
+        <p>A high-quality, unrefined oil extracted from fresh coconut meat, usually by cold-pressing without heat or chemicals. This preserves its natural nutrients, flavour and aroma — unlike refined oil, which is bleached and deodorised.</p>
+        <div class="meta"><span class="chip"><svg><use href="#i-leaf"/></svg>No heat · no chemicals</span><span class="chip brown">VCO</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">08</span></div>
+</section>
+
+<!-- ======================= 9 · MCT / TESTA / CWP ======================= -->
+<section class="page">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>01 · Coconut</b><i></i>Specialty</div></div>
+  <div class="tab t1"><span>Coconut</span></div>
+  <div class="content three" style="display:flex;flex-direction:column;justify-content:space-around;padding:2mm 0 6mm">
+    <div class="prod">
+      <div class="ph"><img src="img/mct.jpg"><span class="num">10</span></div>
+      <div>
+        <div class="kicker">Functional nutrition</div>
+        <h2>Coconut MCT Oil</h2>
+        <p>Medium-Chain Triglyceride oil derived from coconut oil. Its medium-chain fatty acids are metabolised differently from the long-chain fats found in most other oils — chiefly caprylic acid (C8) and capric acid (C10).</p>
+        <div class="meta"><span class="chip">C8 · Caprylic</span><span class="chip">C10 · Capric</span></div>
+      </div>
+    </div>
+    <div class="divider" style="margin:0"></div>
+    <div class="prod rev">
+      <div class="ph"><img src="img/testa.jpg"><span class="num">11</span></div>
+      <div>
+        <div class="kicker">Speciality oil</div>
+        <h2>Coconut Testa Oil</h2>
+        <p>Derived from the testa — the brown outer skin of the coconut kernel. Less widely known than coconut or MCT oil, it contains a distinct profile of fatty acids along with antioxidants and other beneficial compounds.</p>
+        <div class="meta"><span class="chip"><svg><use href="#i-leaf"/></svg>Rich in antioxidants</span></div>
+      </div>
+    </div>
+    <div class="divider" style="margin:0"></div>
+    <div class="prod">
+      <div class="ph"><img src="img/cwp.jpg"><span class="num">12</span></div>
+      <div>
+        <div class="kicker">Instant hydration</div>
+        <h2>Tender Coconut Water Powder</h2>
+        <p>Fresh coconut water, spray-dried into a fine powder that rehydrates instantly while retaining much of its natural goodness — minerals, electrolytes and vitamins.</p>
+        <div class="meta"><span class="chip">Minerals</span><span class="chip">Electrolytes</span><span class="chip">Vitamins</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">09</span></div>
+</section>
+
+<!-- ======================= 10 · COCOPEAT ======================= -->
+<section class="page">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>02 · Coco Peat</b><i></i>Growing media</div></div>
+  <div class="tab t2"><span>Coco Peat</span></div>
+  <div class="content">
+    <div class="kicker">Soil-less growing media</div>
+    <div class="ph-title"><h2>Cocopeat</h2><span class="hsn" style="margin-bottom:2mm">HSN 53050040</span></div>
+    <p class="lead" style="margin-top:1.5mm">A soil-less medium that helps growers achieve higher yields while optimising resources. 5 kg blocks are available in two grades: <b>Washed Low EC</b> and <b>Unwashed High EC</b>.</p>
+    <div class="gallery g3" style="grid-template-rows:56mm;margin:4mm 0 6mm"><img src="img/peat-1.jpg"><img src="img/peat-2.jpg"><img src="img/peat-3.jpg"></div>
+
+    <div class="subh">Quality specifications · Iran requirements</div>
+    <div class="tiles">
+      <div class="tile hl"><div class="v">1 : 5</div><div class="l">Compression ratio</div></div>
+      <div class="tile"><div class="v">&lt; 15%</div><div class="l">Moisture</div></div>
+      <div class="tile"><div class="v">70–75 L</div><div class="l">Breakout volume</div></div>
+      <div class="tile"><div class="v">&lt; 0.5 mS/cm</div><div class="l">EC level (ratio 1:1.5)</div></div>
+      <div class="tile"><div class="v">5 kg ± 100 g</div><div class="l">Weight</div></div>
+      <div class="tile hl"><div class="v">5.5 – 6.5</div><div class="l">pH</div></div>
+      <div class="tile"><div class="v">30×30×10 cm</div><div class="l">Size</div></div>
+      <div class="tile"><div class="v">6–8 mm</div><div class="l">Screen · ¼″ mesh</div></div>
+      <div class="tile"><div class="v">&lt; 10%</div><div class="l">Fibre</div></div>
+      <div class="tile"><div class="v">&lt; 3%</div><div class="l">Impurity</div></div>
+      <div class="tile"><div class="v">None</div><div class="l">Foreign material</div></div>
+      <div class="tile hl" style="background:var(--gold);border-color:var(--gold)"><div class="v">Jan – Jun</div><div class="l" style="color:#3b2a0a">Season</div></div>
+    </div>
+
+    <div class="subh" style="margin-top:5mm">Packing specifications · grow bag</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Size</th><th>Weight</th><th>Mix</th><th>Pith</th><th>Chips</th><th>Pieces / pallet</th><th>40 ft container</th><th>Price / Tuticorin</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>100×15×12</td><td>1.9</td><td>100</td><td>100</td><td>—</td><td>600</td><td>12,000</td><td><b>84</b></td></tr>
+        <tr><td>2</td><td>100×15×12</td><td>2.0</td><td>70/30</td><td>70</td><td>30</td><td>600</td><td>12,000</td><td><b>86</b></td></tr>
+        <tr><td>3</td><td>100×15×15</td><td>2.4</td><td>100</td><td>100</td><td>—</td><td>500</td><td>10,000</td><td><b>97</b></td></tr>
+        <tr><td>4</td><td>100×15×15</td><td>2.5</td><td>70/30</td><td>70</td><td>30</td><td>500</td><td>10,000</td><td><b>98.5</b></td></tr>
+        <tr><td>5</td><td>100×18×14</td><td>2.7</td><td>100</td><td>100</td><td>—</td><td>450</td><td>9,000</td><td><b>101</b></td></tr>
+        <tr><td>6</td><td>100×18×14</td><td>2.8</td><td>70/30</td><td>70</td><td>30</td><td>450</td><td>9,000</td><td><b>104</b></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="meta"><span class="chip"><svg><use href="#i-cal"/></svg>Available 3rd week of January – 1st week of June, every year</span></div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">10</span></div>
+</section>
+
+<!-- ======================= 11 · OPENER: SPICES, COFFEE & PULSES ======================= -->
+<section class="page opener">
+  <div class="mosaic"><img src="img/turmeric-2.jpg"><img src="img/coffee-2.jpg"><img src="img/toor-2.jpg"><img src="img/bengal-2.jpg"><img src="img/moong-2.jpg"></div>
+  <div class="fade"></div>
+  <img class="logo" src="img/logo-light.png" alt="">
+  <div class="no">03</div>
+  <div class="body">
+    <h1>Spices, Coffee <em>&amp; Pulses</em></h1>
+    <p>Golden turmeric, specialty-grade green coffee from the Western Ghats and the protein-rich pulses at the heart of every Indian kitchen.</p>
+  </div>
+  <div class="list"><span>Turmeric finger</span><span>Green coffee beans</span><span>Toor dal</span><span>Moong dal</span><span>Bengal gram</span><span>Urad dal</span></div>
+</section>
+
+<!-- ======================= 12 · TURMERIC + COFFEE ======================= -->
+<section class="page">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>03 · Spices &amp; Coffee</b><i></i>Turmeric · Green coffee</div></div>
+  <div class="tab t3"><span>Spices &amp; Coffee</span></div>
+  <div class="content">
+    <div class="kicker">Spice</div>
+    <div class="ph-title"><h2>Turmeric Finger</h2><span class="hsn" style="margin-bottom:2mm">HSN 09103020</span></div>
+    <p class="lead" style="margin-top:1.5mm">The traditional golden root used as herb and spice around the world — pungent and strong in flavour, consumed in its dried form.</p>
+    <div class="gallery g3" style="grid-template-rows:50mm;margin:4mm 0 5mm"><img src="img/turmeric-1.jpg"><img src="img/turmeric-2.jpg"><img src="img/turmeric-3.jpg"></div>
+    <div class="tiles">
+      <div class="tile hl" style="background:var(--gold);border-color:var(--gold)"><div class="v">3 – 4%</div><div class="l" style="color:#3b2a0a">Curcumin</div></div>
+      <div class="tile"><div class="v">6 – 7%</div><div class="l">Moisture</div></div>
+      <div class="tile"><div class="v">Golden yellow</div><div class="l">Colour</div></div>
+      <div class="tile"><div class="v">Double</div><div class="l">Polished</div></div>
+    </div>
+    <p style="font-size:8pt;color:var(--muted);margin-top:2.4mm"><b style="color:var(--brown)">Size:</b> medium to big (finger size), or average medium &amp; big medium. <b style="color:var(--brown)">Foreign material:</b> strictly no stones, debris or small fingers.</p>
+
+    <div class="divider" style="margin:8mm 0"></div>
+
+    <div class="kicker">Coffee</div>
+    <div class="ph-title"><h2>Green Coffee Beans</h2><span class="hsn" style="margin-bottom:2mm">HSN 09011149</span></div>
+    <p class="lead" style="margin-top:1.5mm">The raw seeds of coffee cherries, separated and processed but not yet roasted. They hold all of the coffee’s taste and potential — unleashed in the roast. Grown in Karnataka, Kerala and Tamil Nadu.</p>
+    <div style="display:grid;grid-template-columns:1fr 64mm;gap:6mm;margin-top:3.5mm;align-items:center">
+      <div class="gallery g3" style="grid-template-columns:1fr 1fr;grid-template-rows:62mm;margin:0"><img src="img/coffee-1.jpg"><img src="img/coffee-2.jpg"></div>
+      <div>
+        <div class="subh" style="margin-bottom:2.5mm">Grades available</div>
+        <div class="grades">
+          <span class="h">Arabica</span><span class="g a3">AAA</span><span class="g a2">AA</span><span class="g">A</span>
+          <span class="h">Robusta</span><span class="g a3">AAA</span><span class="g a2">AA</span><span class="g">A</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">12</span></div>
+</section>
+
+<!-- ======================= 13 · TOOR + MOONG ======================= -->
+<section class="page">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>03 · Pulses</b><i></i>Toor · Moong</div></div>
+  <div class="tab t4"><span>Pulses</span></div>
+  <div class="content" style="top:27mm">
+    <div class="pulse">
+      <div class="pics">
+        <img class="a" src="img/toor-2.jpg"><img class="b" src="img/toor-1.jpg">
+        <div class="aka"><b>Also known as</b>Pigeon pea · Arhar dal · Thuvaram paruppu</div>
+      </div>
+      <div>
+        <div class="kicker">Pulse · 01</div>
+        <h2>Toor Dal</h2>
+        <p>One of the most widely consumed pulses in India and across the tropics — a staple of Indian households for daily meals and festive cooking alike, prized as a major protein source for vegetarian diets.</p>
+        <div class="nutri">
+          <div class="t">Nutrition <span>per 100 g, raw</span></div>
+          <div class="bar p"><span class="lbl">Protein</span><span class="trk"><i style="width:33.8%"></i><i class="r" style="left:30.8%;width:3%"></i></span><span class="val">20–22 g</span></div>
+          <div class="bar"><span class="lbl">Carbs</span><span class="trk"><i style="width:100%"></i><i class="r" style="left:92.3%;width:7.7%"></i></span><span class="val">60–65 g</span></div>
+          <div class="bar"><span class="lbl">Dietary fibre</span><span class="trk"><i style="width:23%"></i></span><span class="val">15 g</span></div>
+          <div class="bar"><span class="lbl">Fat</span><span class="trk"><i style="width:3%"></i></span><span class="val">1–2 g</span></div>
+          <div class="rich"><b>Rich in</b> potassium, folate, magnesium, iron &amp; B-complex vitamins</div>
+        </div>
+        <div style="font-size:7.6pt;color:var(--muted)">Mild, nutty flavour with a creamy texture.</div>
+        <div class="uses"><span>Sambar</span><span>Dal tadka</span><span>Khichdi</span><span>Soups &amp; stews</span><span>Curries</span><span>Gluten-free flour</span></div>
+      </div>
+    </div>
+    <div class="divider" style="margin:3mm 0 5mm"></div>
+    <div class="pulse">
+      <div class="pics">
+        <img class="a" src="img/moong-1.jpg"><img class="b" src="img/moong-2.jpg">
+        <div class="aka"><b>Also known as</b>Green gram · Mung bean (husked &amp; de-husked)</div>
+      </div>
+      <div>
+        <div class="kicker">Pulse · 02</div>
+        <h2>Moong Dal</h2>
+        <p>One of the most nutritious and easily digestible pulses, valued for its light texture and quick cooking time. Low in fat and gentle to digest, it is often recommended for infants, the elderly and those recovering from illness.</p>
+        <div class="nutri">
+          <div class="t">Nutrition <span>per 100 g, raw</span></div>
+          <div class="bar p"><span class="lbl">Protein</span><span class="trk"><i style="width:36.9%"></i></span><span class="val">24 g</span></div>
+          <div class="bar"><span class="lbl">Carbs</span><span class="trk"><i style="width:90.8%"></i></span><span class="val">59 g</span></div>
+          <div class="bar"><span class="lbl">Fibre</span><span class="trk"><i style="width:12.3%"></i></span><span class="val">8 g</span></div>
+          <div class="bar"><span class="lbl">Fat</span><span class="trk"><i style="width:3%"></i></span><span class="val">1–2 g</span></div>
+          <div class="rich"><b>Rich in</b> iron, magnesium, potassium, folate &amp; vitamin B-complex</div>
+        </div>
+        <div class="uses"><span>Main courses</span><span>Breakfast</span><span>Snacks</span><span>Desserts</span><span>East, SE &amp; South Asian cuisine</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">13</span></div>
+</section>
+
+<!-- ======================= 14 · BENGAL + URAD ======================= -->
+<section class="page">
+  <div class="chrome-top"><img src="img/logo.png" alt=""><div class="crumb"><b>03 · Pulses</b><i></i>Bengal gram · Urad</div></div>
+  <div class="tab t4"><span>Pulses</span></div>
+  <div class="content" style="top:27mm">
+    <div class="pulse">
+      <div class="pics">
+        <img class="a" src="img/bengal-2.jpg"><img class="b" src="img/bengal-1.jpg">
+        <div class="aka"><b>Also known as</b>Chickpea · Chana · Gram</div>
+      </div>
+      <div>
+        <div class="kicker">Pulse · 03</div>
+        <h2>Bengal Gram</h2>
+        <p>One of India’s most important pulses — eaten whole, as split dal, as flour (besan) and as roasted snacks. Its high protein and fibre content supports sustained energy and digestive health.</p>
+        <div class="nutri">
+          <div class="t">Nutrition <span>per 100 g, raw</span></div>
+          <div class="bar p"><span class="lbl">Protein</span><span class="trk"><i style="width:33.8%"></i><i class="r" style="left:30.8%;width:3%"></i></span><span class="val">20–22 g</span></div>
+          <div class="bar"><span class="lbl">Carbs</span><span class="trk"><i style="width:92.3%"></i></span><span class="val">60 g</span></div>
+          <div class="bar"><span class="lbl">Fibre</span><span class="trk"><i style="width:23%"></i><i class="r" style="left:18.5%;width:4.5%"></i></span><span class="val">12–15 g</span></div>
+          <div class="bar"><span class="lbl">Fat</span><span class="trk"><i style="width:9.2%"></i><i class="r" style="left:7.7%;width:1.5%"></i></span><span class="val">5–6 g</span></div>
+          <div class="rich"><b>Rich in</b> iron, calcium, phosphorus, magnesium, B-complex &amp; folate</div>
+        </div>
+        <div class="uses"><span>Curries &amp; salads</span><span>Pakoras &amp; chillas</span><span>Vadas</span><span>Halwa</span><span>Pulao</span><span>Socca / farinata</span></div>
+      </div>
+    </div>
+    <div class="divider" style="margin:3mm 0 5mm"></div>
+    <div class="pulse">
+      <div class="pics">
+        <img class="a" src="img/urad-2.jpg"><img class="b" src="img/urad-1.jpg">
+        <div class="aka"><b>Also known as</b>Black gram · Mash dal · Ulundhu</div>
+      </div>
+      <div>
+        <div class="kicker">Pulse · 04</div>
+        <h2>Urad Dal</h2>
+        <p>A protein-rich pulse known for its strong flavour and sticky texture when cooked — essential to both South and North Indian cooking and especially valuable for vegetarians and energy-dense diets.</p>
+        <div class="nutri">
+          <div class="t">Nutrition <span>per 100 g, raw</span></div>
+          <div class="bar p"><span class="lbl">Protein</span><span class="trk"><i style="width:40%"></i><i class="r" style="left:36.9%;width:3.1%"></i></span><span class="val">24–26 g</span></div>
+          <div class="bar"><span class="lbl">Carbs</span><span class="trk"><i style="width:92.3%"></i></span><span class="val">60 g</span></div>
+          <div class="bar"><span class="lbl">Fibre</span><span class="trk"><i style="width:12.3%"></i><i class="r" style="left:10.8%;width:1.5%"></i></span><span class="val">7–8 g</span></div>
+          <div class="bar"><span class="lbl">Fat</span><span class="trk"><i style="width:4.6%"></i><i class="r" style="left:1.5%;width:3.1%"></i></span><span class="val">1–3 g</span></div>
+          <div class="rich"><b>Rich in</b> iron, calcium, magnesium, potassium, folate &amp; B-complex</div>
+        </div>
+        <div class="uses"><span>Idli &amp; dosa batter</span><span>Vadas</span><span>Papad</span><span>Murukku</span><span>Dal makhani</span><span>Laddus</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="chrome-bot"><span>FreshNet Farms · Product Catalogue</span><span class="pn">14</span></div>
+</section>
+
+<!-- ======================= 15 · BACK COVER ======================= -->
+<section class="page back">
+  <div class="glow"></div>
+  <img class="logo" src="img/logo-light.png" alt="FreshNet Farms">
+  <div class="cta">
+    <h2>Let’s grow <em>global markets</em><br>together.</h2>
+    <p>Request samples, specifications or a quotation — our team will tailor grades and packing to your market.</p>
+  </div>
+  <div class="sites">
+    <div class="site"><div class="ic"><svg><use href="#i-pin"/></svg></div><b>Corporate office</b><p>No. 4, Palladam Road, LIG Colony, Kerela Samajam, Pollachi – 642002</p></div>
+    <div class="site"><div class="ic"><svg><use href="#i-pin"/></svg></div><b>Coconut export packhouse</b><p>Kallipatti Village, Negamum Road, Pollachi Taluk, Coimbatore – 642120</p><div class="ph">+91 98851 01870</div></div>
+    <div class="site"><div class="ic"><svg><use href="#i-pin"/></svg></div><b>Coconut processing unit</b><p>3/160, G. Kolanthaisamy Layout, Thinnakalani, Peddatalapalli, Krishnagiri, Tamil Nadu – 635001</p><div class="ph">+91 80724 03024</div></div>
+  </div>
+  <div class="contact">
+    <div><svg><use href="#i-mail"/></svg><div><small>Email us</small><span>freshnetfarms@gmail.com</span></div></div>
+    <div><svg><use href="#i-phone"/></svg><div><small>Call us</small><span>+91 98851 01870</span></div></div>
+  </div>
+  <div class="legal">FreshNet Farms Private Limited · Tamil Nadu, India</div>
+  <div class="strip"></div>
+</section>
+
+</body>
+</html>
