@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cogyo Tin Mockup</title>
+<!-- 3D tin mockup. render.cjs passes the flat label texture to drawMockup().
+     The label is wrapped onto a cylinder column-by-column (true cylindrical
+     projection), then shaded with studio lighting. -->
+<style>
+  html,body{margin:0;background:#ddd}
+  #stage{width:1600px;height:1200px;display:block}
+</style>
+</head>
+<body>
+<canvas id="stage" width="1600" height="1200"></canvas>
+<script>
+const TIN = { dia: 73, height: 110, labelH: 100, wrap: 232 };   // mm
+const PANEL = { nutri: .30, front: .40, legal: .30 };           // same split as label.html
+
+function chrome(ctx, x0, x1, dark = 0) {
+  const g = ctx.createLinearGradient(x0, 0, x1, 0);
+  const s = [[0,'#4b4d50'],[.08,'#8e9094'],[.2,'#d9dadc'],[.3,'#f7f7f8'],[.38,'#b5b7ba'],[.55,'#e4e5e7'],[.72,'#9fa1a4'],[.86,'#6c6e71'],[1,'#3a3c3e']];
+  s.forEach(([o, c]) => g.addColorStop(o, c));
+  return g;
+}
+
+// Draw one tin. cx = centre x, by = y of the bottom rim centre (front), D = diameter in px,
+// view = which point of the wrap (0–1 of the 232 mm wrap) faces the camera.
+function drawTin(ctx, tex, { cx, by, D, view, tilt = .17 }) {
+  const R = D / 2, ry = R * tilt, k = D / TIN.dia;               // px per mm
+  const Hp = TIN.height * k, Lp = TIN.labelH * k, rim = (Hp - Lp) / 2;
+  const topY = by - Hp;                                            // centre of top ellipse
+
+  // contact + soft studio shadow
+  ctx.save();
+  ctx.filter = 'blur(28px)'; ctx.fillStyle = 'rgba(40,30,15,.38)';
+  ctx.beginPath(); ctx.ellipse(cx + R * .35, by + ry * .3, R * 1.25, ry * 1.6, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.filter = 'blur(6px)'; ctx.fillStyle = 'rgba(20,14,6,.55)';
+  ctx.beginPath(); ctx.ellipse(cx + 4, by + 2, R * .98, ry * .9, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+
+  // metal body (seen between label and lid / base)
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(cx, topY, R, ry, 0, Math.PI, 0, true);
+  ctx.lineTo(cx + R, by); ctx.ellipse(cx, by, R, ry, 0, 0, Math.PI); ctx.closePath();
+  ctx.fillStyle = chrome(ctx, cx - R, cx + R); ctx.fill();
+  ctx.restore();
+
+  // label, column by column
+  const tw = tex.width, th = tex.height, uC = view * tw;
+  const yL = topY + rim;                                           // label top at the silhouette edge
+  for (let x = -R; x < R; x += 1) {
+    const xc = Math.min(R - .001, Math.max(-R + .001, x + .5));
+    const th0 = Math.asin(xc / R);
+    let u = uC + th0 / (2 * Math.PI) * tw; u = ((u % tw) + tw) % tw;
+    const du = Math.max(1, tw / (2 * Math.PI) / Math.sqrt(R * R - xc * xc) * 1);
+    const yo = ry * Math.sqrt(1 - (xc / R) ** 2);
+    ctx.drawImage(tex, Math.min(tw - du, u), 0, du, th, cx + x, yL + yo, 1.6, Lp);
+  }
+
+  // cylinder lighting over label + metal
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(cx, topY, R, ry, 0, Math.PI, 0, true);
+  ctx.lineTo(cx + R, by); ctx.ellipse(cx, by, R, ry, 0, 0, Math.PI); ctx.closePath(); ctx.clip();
+  let g = ctx.createLinearGradient(cx - R, 0, cx + R, 0);
+  g.addColorStop(0, 'rgba(0,0,0,.55)'); g.addColorStop(.1, 'rgba(0,0,0,.22)'); g.addColorStop(.28, 'rgba(0,0,0,0)');
+  g.addColorStop(.7, 'rgba(0,0,0,.05)'); g.addColorStop(.88, 'rgba(0,0,0,.32)'); g.addColorStop(1, 'rgba(0,0,0,.68)');
+  ctx.fillStyle = g; ctx.fillRect(cx - R, topY - ry, D, Hp + 2 * ry);
+  // broad soft highlight + crisp specular stripe
+  ctx.globalCompositeOperation = 'screen';
+  g = ctx.createLinearGradient(cx - R, 0, cx + R, 0);
+  g.addColorStop(.12, 'rgba(255,255,255,0)'); g.addColorStop(.24, 'rgba(255,255,255,.16)'); g.addColorStop(.36, 'rgba(255,255,255,0)');
+  g.addColorStop(.25, 'rgba(255,255,255,.18)');
+  ctx.fillStyle = g; ctx.fillRect(cx - R, topY - ry, D, Hp + 2 * ry);
+  g = ctx.createLinearGradient(cx - R, 0, cx + R, 0);
+  g.addColorStop(.205, 'rgba(255,255,255,0)'); g.addColorStop(.225, 'rgba(255,255,255,.32)'); g.addColorStop(.245, 'rgba(255,255,255,0)');
+  g.addColorStop(.83, 'rgba(255,255,255,0)'); g.addColorStop(.845, 'rgba(255,255,255,.1)'); g.addColorStop(.86, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(cx - R, topY - ry, D, Hp + 2 * ry);
+  ctx.restore();
+
+  // beads (ridges) on the metal bands + label edge shadow
+  const arc = (y, color, w) => { ctx.strokeStyle = color; ctx.lineWidth = w; ctx.beginPath(); ctx.ellipse(cx, y, R - .5, ry, 0, 0, Math.PI); ctx.stroke(); };
+  for (const [y0, dir] of [[topY, 1], [by, -1]]) {
+    for (let i = 1; i <= 2; i++) { const y = y0 + dir * rim * (i / 3); arc(y, 'rgba(255,255,255,.55)', 2); arc(y + 2.5, 'rgba(0,0,0,.28)', 2); }
+  }
+  arc(yL + Lp + 1, 'rgba(0,0,0,.25)', 2);
+  arc(yL - 1, 'rgba(0,0,0,.18)', 1.5);
+
+  // lid: seam ring, countersink, expansion rings
+  ctx.save();
+  ctx.beginPath(); ctx.ellipse(cx, topY, R + 3, ry + 3, 0, 0, Math.PI * 2);
+  ctx.fillStyle = chrome(ctx, cx - R, cx + R); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx, topY + 2, R * .93, ry * .9, 0, 0, Math.PI * 2);
+  g = ctx.createLinearGradient(0, topY - ry, 0, topY + ry);
+  g.addColorStop(0, '#76787b'); g.addColorStop(.5, '#c9cacc'); g.addColorStop(1, '#eeeff0');
+  ctx.fillStyle = g; ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx, topY + 4, R * .88, ry * .84, 0, 0, Math.PI * 2);
+  g = ctx.createLinearGradient(cx - R, topY - ry, cx + R, topY + ry);
+  g.addColorStop(0, '#b9bbbe'); g.addColorStop(.45, '#eff0f1'); g.addColorStop(1, '#8d8f92');
+  ctx.fillStyle = g; ctx.fill();
+  for (const f of [.7, .5]) {
+    ctx.beginPath(); ctx.ellipse(cx, topY + 4, R * f, ry * f * .95, 0, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(cx, topY + 6, R * f, ry * f * .95, 0, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = 2; ctx.stroke();
+  }
+  ctx.restore();
+}
+
+window.drawMockup = async (src) => {
+  const tex = new Image(); tex.src = src; await tex.decode();
+  const c = document.getElementById('stage'), ctx = c.getContext('2d');
+  const W = c.width, H = c.height;
+  // studio sweep
+  let g = ctx.createRadialGradient(W * .45, H * .35, 50, W * .5, H * .5, W * .8);
+  g.addColorStop(0, '#FBF6EA'); g.addColorStop(.6, '#EADFC8'); g.addColorStop(1, '#CDBE9F');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  g = ctx.createLinearGradient(0, H * .62, 0, H);
+  g.addColorStop(0, 'rgba(120,95,55,0)'); g.addColorStop(1, 'rgba(120,95,55,.22)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  // back tin shows the info side, front tin shows the face
+  drawTin(ctx, tex, { cx: 1135, by: 1000, D: 400, view: PANEL.nutri + PANEL.front + PANEL.legal * .5 - .02 });
+  drawTin(ctx, tex, { cx: 640, by: 1085, D: 540, view: PANEL.nutri + PANEL.front / 2 });
+};
+</script>
+</body>
+</html>

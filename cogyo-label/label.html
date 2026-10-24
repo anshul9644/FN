@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cogyo Coconut Cream 400 ml – Tin Wrap Label</title>
+<!--
+  COGYO COCONUT CREAM 400 ml — WRAP-AROUND TIN LABEL
+  Template for the Cogyo cream range. Edit the variables in :root (size,
+  colours, type) and the copy inside the clearly marked PANEL sections.
+  Render with:  node render.cjs   (writes label.pdf + PNG previews + mockup)
+  Add ?guides to the URL to see trim / safe zone / fold guides.
+-->
+<style>
+/* ============================================================
+   FONTS (embedded locally so the printer gets exactly these)
+   ============================================================ */
+@font-face{font-family:"Fraunces";src:url(fonts/fraunces.woff2) format("woff2");font-weight:300 900;font-style:normal}
+@font-face{font-family:"Fraunces";src:url(fonts/fraunces-italic.woff2) format("woff2");font-weight:300 900;font-style:italic}
+@font-face{font-family:"Inter";src:url(fonts/inter-latin.woff2) format("woff2");font-weight:400 900;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+2215}
+@font-face{font-family:"Inter";src:url(fonts/inter-latin-ext.woff2) format("woff2");font-weight:400 900;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1E00-1E9F,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+
+/* ============================================================
+   1. DIELINE — paste Sakthi's exact dieline numbers here
+   ============================================================ */
+:root{
+  --trim-w:   232mm;   /* label wrap length (= tin circumference + tolerance) */
+  --overlap:  10mm;    /* glue overlap strip, right-hand end, no text        */
+  --label-h:  100mm;   /* label height                                        */
+  --bleed:    3mm;
+  --safe:     3mm;     /* all text stays this far inside the trim            */
+  --slug:     12mm;    /* crop-mark area around the bleed (PDF only)          */
+
+  /* panel split, left → right (must add up to 1) */
+  --k-nutri:  0.30;
+  --k-front:  0.40;
+  --k-legal:  0.30;
+
+  --w-nutri:  calc(var(--trim-w) * var(--k-nutri));
+  --w-front:  calc(var(--trim-w) * var(--k-front));
+  --w-legal:  calc(var(--trim-w) * var(--k-legal));
+
+/* ============================================================
+   2. COLOURS — swap these per variant (e.g. Cogyo Coconut Milk)
+   ============================================================ */
+  --front-bg:     #1F4D2B;   /* deep tropical green                      */
+  --front-bg-dk:  #143A1F;   /* vignette edge                            */
+  --front-glow:   #3F8A4E;   /* radial glow behind hero                  */
+  --palm-sil:     #173F22;   /* palm silhouettes on the front edges      */
+  --gold:         #F2C14E;   /* premium accent  (spot: PMS 7408 C)       */
+  --gold-dk:      #B8862A;
+  --gold-lt:      #FBE3A0;
+  --cream:        #FBF8EF;
+  --cream-2:      #F3EDDD;   /* table zebra tint                         */
+  --rule:         #CDBF9F;
+  --ink:          #222222;
+  --ink-2:        #3D3D3D;
+  --green-ink:    #1F4D2B;   /* headings on cream panels                 */
+  --veg:          #0A8A2E;
+
+/* ============================================================
+   3. TYPE
+   ============================================================ */
+  --f-brand: "Fraunces", "Playfair Display", Georgia, serif;
+  --f-body:  "Inter", "Montserrat", Arial, sans-serif;
+  --fs-small: 6.3pt;   /* side-panel body: x-height ≈ 1.17 mm (legal min 1 mm) */
+  --fs-table: 6.4pt;   /* nutrition table:  x-height ≈ 1.23 mm                 */
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#8a8a84}
+body{font-family:var(--f-body);color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact;font-synthesis:none}
+@page{margin:0}
+@media print{html,body{background:#fff}}
+
+/* ---------- sheet = bleed box + slug with crop marks ---------- */
+.sheet{position:relative;background:#fff;
+  width: calc(var(--trim-w) + var(--overlap) + 2*var(--bleed) + 2*var(--slug));
+  height:calc(var(--label-h) + 2*var(--bleed) + 2*var(--slug))}
+.trim{position:absolute;left:calc(var(--slug) + var(--bleed));top:calc(var(--slug) + var(--bleed));
+  width:calc(var(--trim-w) + var(--overlap));height:var(--label-h)}
+.marks{position:absolute;inset:0;pointer-events:none}
+.marks i{position:absolute;background:#000}
+.slugtxt{position:absolute;left:calc(var(--slug) + var(--bleed) + 10mm);bottom:3.2mm;font:5.5pt/1 var(--f-body);color:#000;letter-spacing:.02em}
+
+/* every panel is drawn from bleed edge to bleed edge vertically */
+.panel{position:absolute;top:calc(-1*var(--bleed));height:calc(var(--label-h) + 2*var(--bleed));overflow:hidden}
+.panel > .in{position:absolute;top:var(--bleed);height:var(--label-h);left:0;right:0}
+
+/* ============================================================
+   PANEL A — NUTRITION (left)
+   ============================================================ */
+.p-nutri{left:calc(-1*var(--bleed));width:calc(var(--w-nutri) + var(--bleed));background:var(--cream)}
+.p-nutri > .in{left:var(--bleed);padding:calc(var(--safe) + 1.2mm) 3.6mm var(--safe) calc(var(--safe) + 1mm);display:flex;flex-direction:column;gap:1.5mm;font-size:var(--fs-small);line-height:1.3;color:var(--ink-2)}
+.sec-title{font-weight:800;font-size:7.6pt;letter-spacing:.07em;color:var(--green-ink);text-transform:uppercase;line-height:1}
+.sec-title:after{content:"";display:block;width:12mm;height:.55mm;background:var(--gold);margin-top:1.1mm;border-radius:1mm}
+.serving{font-size:var(--fs-table);color:var(--ink)}
+.serving b{font-weight:700}
+table.nut{width:100%;border-collapse:collapse;font-size:var(--fs-table);line-height:1.2;color:var(--ink);font-variant-numeric:tabular-nums}
+table.nut th{background:var(--green-ink);color:var(--cream);font-weight:700;text-align:right;padding:.75mm 1mm;font-size:5.9pt;line-height:1.15;vertical-align:bottom}
+table.nut th:first-child{text-align:left}
+table.nut td{padding:.55mm 1mm;border-bottom:.2mm solid var(--rule);text-align:right;white-space:nowrap}
+table.nut td:first-child{text-align:left;font-weight:600}
+table.nut tr:nth-child(even) td{background:var(--cream-2)}
+table.nut tr:nth-child(odd) td{background:#fff}
+table.nut td.sub{padding-left:3mm;font-weight:400}
+table.nut td.sub2{padding-left:5mm;font-weight:400}
+table.nut tbody tr:last-child td{border-bottom:.45mm solid var(--green-ink)}
+.foot{font-size:5.9pt;color:var(--ink-2);margin-top:-.6mm}
+.ingr b,.allergen b{color:var(--green-ink);font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.allergen{font-weight:600;color:var(--ink)}
+
+/* ============================================================
+   PANEL B — FRONT (centre of the tin face)
+   ============================================================ */
+.p-front{left:var(--w-front-left, var(--w-nutri));width:var(--w-front);background:var(--front-bg);color:var(--cream)}
+.p-front .bg{position:absolute;inset:0;width:100%;height:100%}
+.p-front .edge{position:absolute;top:0;bottom:0;width:.7mm;background:linear-gradient(var(--gold-dk),var(--gold),var(--gold-dk))}
+.p-front .edge.l{left:0}.p-front .edge.r{right:0}
+
+.badge{position:absolute;top:5mm;left:50%;transform:translateX(-50%);height:11.2mm;padding:0 4.6mm;background:var(--cream);
+  border-radius:6mm;display:flex;align-items:center;box-shadow:0 .5mm 1.6mm rgba(0,0,0,.35), inset 0 0 0 .35mm rgba(184,134,42,.55)}
+.badge img{height:8.4mm;width:auto;display:block}
+.vegmark{position:absolute;top:5mm;right:calc(var(--safe) + 1.6mm);width:6mm;height:6mm}
+
+.brand{position:absolute;left:0;right:0;top:15.2mm;text-align:center;font-family:var(--f-brand);font-style:italic;font-weight:900;
+  font-size:20.5mm;line-height:1;color:var(--gold);letter-spacing:-.01em;
+  text-shadow:0 .45mm 0 var(--gold-dk), 0 1.1mm 2.2mm rgba(0,0,0,.45)}
+.prodname{position:absolute;left:0;right:0;top:37.4mm;text-align:center;font-weight:800;font-size:6.1mm;line-height:1;color:var(--cream);letter-spacing:.005em;
+  text-shadow:0 .4mm 1.2mm rgba(0,0,0,.35)}
+.tagline{position:absolute;left:0;right:0;top:44.6mm;text-align:center;font-weight:700;font-size:2.35mm;line-height:1;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.tagline span{opacity:.75;margin:0 .6mm}
+
+.hero{position:absolute;left:0;top:44mm;width:100%;height:54mm}
+.hero svg,.hero img{width:100%;height:100%;display:block}
+.seal{position:absolute;width:17.5mm;height:17.5mm;left:68.2mm;top:50.5mm;filter:drop-shadow(0 .7mm 1.1mm rgba(0,0,0,.45))}
+.netqty{position:absolute;left:50%;bottom:3.6mm;transform:translateX(-50%);background:var(--cream);color:var(--green-ink);
+  border-radius:5mm;height:8.6mm;padding:0 4.6mm;display:flex;align-items:center;gap:1.6mm;white-space:nowrap;
+  box-shadow:0 .5mm 1.6mm rgba(0,0,0,.35), inset 0 0 0 .35mm rgba(184,134,42,.55)}
+.netqty small{font-size:2.7mm;font-weight:700;letter-spacing:.02em;color:var(--ink-2)}
+.netqty b{font-size:6mm;font-weight:800;line-height:1;letter-spacing:-.01em} /* digit height ≈ 4.4 mm ≥ 4 mm legal min */
+
+/* ============================================================
+   PANEL C — LEGAL / INFO (right)
+   ============================================================ */
+.p-legal{left:calc(var(--w-nutri) + var(--w-front));width:var(--w-legal);background:var(--cream)}
+.p-legal > .in{padding:calc(var(--safe) + 1.2mm) calc(var(--safe) + 1mm) var(--safe) 3.6mm;display:flex;flex-direction:column;gap:1.25mm;font-size:var(--fs-small);line-height:1.28;color:var(--ink-2)}
+.p-legal b{color:var(--ink);font-weight:700}
+.p-legal .lbl{font-weight:800;color:var(--green-ink);text-transform:uppercase;letter-spacing:.05em;font-size:5.9pt}
+.serve{display:flex;align-items:center;gap:1.8mm;background:var(--green-ink);color:var(--cream);border-radius:2.4mm;padding:1.1mm 2mm 1.1mm 1.4mm;font-weight:600;line-height:1.2}
+.serve svg{width:6.6mm;height:6.6mm;flex:none}
+.serve b{color:var(--gold)}
+.shake{display:inline-flex;align-items:center;gap:1mm;font-weight:800;color:var(--green-ink);text-transform:uppercase;letter-spacing:.06em;font-size:5.9pt}
+.shake svg{width:3.4mm;height:3.4mm}
+.party{display:flex;gap:1.6mm;align-items:flex-start}
+.fssai{flex:none;width:9.5mm;height:6.4mm}
+.row-bottom{margin-top:auto;display:flex;gap:1.6mm;align-items:stretch}
+.inkjet{flex:1;border:.25mm dashed #9b9078;background:#fff;border-radius:1mm;padding:1mm 1.2mm;display:flex;flex-direction:column;justify-content:space-between;font-size:5.8pt;line-height:1.15;color:var(--ink)}
+.inkjet div{border-bottom:.15mm solid #e3dccb;padding-bottom:.35mm}
+.inkjet div:last-child{border-bottom:0}
+.inkjet em{font-style:normal;color:#7a7160;font-size:5.8pt}
+.barcode{flex:none;width:37mm;height:26mm;background:#fff;border:.25mm solid #222;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;font-size:6.2pt;letter-spacing:.06em;color:#222;line-height:1.3}
+
+/* ============================================================
+   PANEL D — GLUE OVERLAP (no text, no ink-heavy art)
+   ============================================================ */
+.p-overlap{left:var(--trim-w);width:calc(var(--overlap) + var(--bleed));background:var(--cream)}
+
+/* ---------- guides (?guides) ---------- */
+.guides{display:none;position:absolute;inset:0;pointer-events:none;z-index:50}
+body.show-guides .guides{display:block}
+.guides i{position:absolute;top:0;bottom:0;border-left:.25mm dashed #e0218a}
+.guides .safe{position:absolute;outline:.25mm dashed #00a3e0;outline-offset:0}
+</style>
+</head>
+<body>
+<div class="sheet" id="sheet">
+  <div class="marks" id="marks"></div>
+  <div class="slugtxt">COGYO COCONUT CREAM 400 ml · wrap label 232 × 100 mm + 10 mm glue overlap · 3 mm bleed · FreshNet Farms Pvt Ltd · v1</div>
+
+  <div class="trim" id="trim">
+
+    <!-- ======================================================
+         PANEL A — NUTRITION
+         ====================================================== -->
+    <section class="panel p-nutri" id="p-nutri"><div class="in">
+      <h2 class="sec-title">Nutrition Information</h2>
+      <p class="serving"><b>Serving size</b> 100 ml &nbsp;|&nbsp; <b>Servings per container</b> 4</p>
+      <table class="nut">
+        <thead><tr><th>Nutrient</th><th>Per 100 ml</th><th>% RDA<br>per serve*</th></tr></thead>
+        <tbody>
+          <tr><td>Energy</td><td>210 kcal</td><td>10.5%</td></tr>
+          <tr><td>Total fat</td><td>22 g</td><td>13.8%</td></tr>
+          <tr><td class="sub">Saturated fat</td><td>20 g</td><td>91.7%</td></tr>
+          <tr><td class="sub">Trans fat</td><td>0 g</td><td>0%</td></tr>
+          <tr><td>Cholesterol</td><td>0 mg</td><td>0%</td></tr>
+          <tr><td>Sodium</td><td>20 mg</td><td>1%</td></tr>
+          <tr><td>Total carbohydrate</td><td>2 g</td><td>1.4%</td></tr>
+          <tr><td class="sub">Dietary fibre</td><td>0 g</td><td>0%</td></tr>
+          <tr><td class="sub">Total sugar</td><td>1.5 g</td><td>–</td></tr>
+          <tr><td class="sub2">Added sugars</td><td>0 g</td><td>0%</td></tr>
+          <tr><td>Protein</td><td>2 g</td><td>3.4%</td></tr>
+          <tr><td>Vitamin D</td><td>0 mcg</td><td>0%</td></tr>
+          <tr><td>Calcium</td><td>2.4 mg</td><td>0.2%</td></tr>
+          <tr><td>Potassium</td><td>229 mg</td><td>6.5%</td></tr>
+        </tbody>
+      </table>
+      <p class="foot">*% RDA based on a 2000 kcal diet.</p>
+      <p class="ingr"><b>Ingredients:</b> Coconut cream, water, stabiliser (INS 466), thickener (INS 415), sequestrant (INS 331(iii)), emulsifier (INS 435), preservative (INS 223).</p>
+      <p class="allergen"><b>Allergen:</b> Contains coconut.</p>
+    </div></section>
+
+    <!-- ======================================================
+         PANEL B — FRONT
+         ====================================================== -->
+    <section class="panel p-front" id="p-front">
+      <!-- background: glow + palm silhouettes (fills bleed) -->
+      <svg class="bg" viewBox="0 -30 928 1060" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <radialGradient id="glow" cx="464" cy="700" r="560" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="var(--front-glow)" stop-opacity=".95"/>
+            <stop offset=".45" stop-color="var(--front-glow)" stop-opacity=".35"/>
+            <stop offset="1" stop-color="var(--front-glow)" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="vign" cx="464" cy="520" r="760" gradientUnits="userSpaceOnUse">
+            <stop offset=".55" stop-color="var(--front-bg-dk)" stop-opacity="0"/>
+            <stop offset="1" stop-color="var(--front-bg-dk)" stop-opacity=".9"/>
+          </radialGradient>
+        </defs>
+        <rect x="-50" y="-60" width="1028" height="1120" fill="var(--front-bg)"/>
+        <rect x="-50" y="-60" width="1028" height="1120" fill="url(#glow)"/>
+        <g id="palm-sil" fill="var(--palm-sil)"></g>
+        <rect x="-50" y="-60" width="1028" height="1120" fill="url(#vign)"/>
+      </svg>
+      <div class="in">
+        <div class="badge"><img src="freshnet-logo.png" alt="FreshNet Farms"></div>
+        <!-- FSSAI veg mark -->
+        <svg class="vegmark" viewBox="0 0 60 60" aria-label="Vegetarian">
+          <rect x="0" y="0" width="60" height="60" rx="5" fill="#fff"/>
+          <rect x="7" y="7" width="46" height="46" fill="none" stroke="var(--veg)" stroke-width="5"/>
+          <circle cx="30" cy="30" r="12" fill="var(--veg)"/>
+        </svg>
+
+        <h1 class="brand">Cogyo</h1>
+        <div class="prodname">Coconut Cream</div>
+        <div class="tagline">Dairy Free <span>•</span> For Cooking &amp; Baking</div>
+
+        <!-- HERO: SVG illustration. To use a photo instead replace this <svg> with
+             <img src="hero.jpg" style="object-fit:cover"> (min. 1100 × 640 px for 300 dpi). -->
+        <div class="hero">
+          <svg viewBox="0 0 928 540" aria-label="Halved coconut with a splash of coconut cream">
+            <defs>
+              <!-- husk fibres -->
+              <filter id="husk" x="-5%" y="-5%" width="110%" height="110%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.55 0.025" numOctaves="3" seed="7" result="n"/>
+                <feColorMatrix in="n" type="matrix" values="0 0 0 0 .13  0 0 0 0 .07  0 0 0 0 .03  2.4 0 0 0 -1.05" result="dk"/>
+                <feTurbulence type="fractalNoise" baseFrequency="0.7 0.03" numOctaves="2" seed="21" result="n2"/>
+                <feColorMatrix in="n2" type="matrix" values="0 0 0 0 .78  0 0 0 0 .55  0 0 0 0 .33  2.2 0 0 0 -1.25" result="lt"/>
+                <feMerge result="m"><feMergeNode in="SourceGraphic"/><feMergeNode in="dk"/><feMergeNode in="lt"/></feMerge>
+                <feComposite in="m" in2="SourceAlpha" operator="in"/>
+              </filter>
+              <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
+              <filter id="soft1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.2"/></filter>
+              <filter id="dof" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.1"/></filter>
+              <filter id="shadow" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="14"/></filter>
+
+              <radialGradient id="shellG" cx="380" cy="330" r="330" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#9A6534"/><stop offset=".5" stop-color="#6E4220"/><stop offset="1" stop-color="#2E1A0B"/>
+              </radialGradient>
+              <radialGradient id="wholeG" cx="620" cy="210" r="210" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#A06A38"/><stop offset=".55" stop-color="#6A3F1E"/><stop offset="1" stop-color="#26150A"/>
+              </radialGradient>
+              <radialGradient id="wholeG2" cx="160" cy="240" r="200" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#94602F"/><stop offset=".6" stop-color="#5E3818"/><stop offset="1" stop-color="#22130A"/>
+              </radialGradient>
+              <linearGradient id="fleshG2" x1="0" y1="200" x2="0" y2="430" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E2D9C6"/>
+              </linearGradient>
+              <radialGradient id="cavityG" cx="240" cy="330" r="100" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#F4EEE2"/><stop offset=".85" stop-color="#D8CDB7"/><stop offset="1" stop-color="#BFB29A"/>
+              </radialGradient>
+              <linearGradient id="fleshG" x1="0" y1="238" x2="0" y2="362" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#F7F3EA"/><stop offset="1" stop-color="#E4DCCB"/>
+              </linearGradient>
+              <linearGradient id="innerWall" x1="0" y1="246" x2="0" y2="300" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#D9D0BE"/><stop offset="1" stop-color="#FFFFFF"/>
+              </linearGradient>
+              <radialGradient id="poolG" cx="430" cy="290" r="230" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#FFFFFF"/><stop offset=".6" stop-color="#FAF7F0"/><stop offset="1" stop-color="#E6DECD"/>
+              </radialGradient>
+              <linearGradient id="crownG" x1="0" y1="50" x2="0" y2="305" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#FCFAF4"/><stop offset="1" stop-color="#EAE3D3"/>
+              </linearGradient>
+              <linearGradient id="crownShade" x1="285" y1="0" x2="655" y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#B9AE98" stop-opacity=".75"/>
+                <stop offset=".18" stop-color="#FFFFFF" stop-opacity="0"/>
+                <stop offset=".42" stop-color="#FFFFFF" stop-opacity=".0"/>
+                <stop offset=".78" stop-color="#C9BFA9" stop-opacity=".15"/>
+                <stop offset="1" stop-color="#9C907A" stop-opacity=".8"/>
+              </linearGradient>
+              <linearGradient id="backCrownG" x1="0" y1="120" x2="0" y2="300" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#F1EBDD"/><stop offset="1" stop-color="#CFC5B0"/>
+              </linearGradient>
+              <radialGradient id="dropG" cx=".35" cy=".3" r=".75">
+                <stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#F6F1E6"/><stop offset="1" stop-color="#C9BEA8"/>
+              </radialGradient>
+              <linearGradient id="leafA" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#2F7A38"/><stop offset="1" stop-color="#6DB255"/>
+              </linearGradient>
+              <linearGradient id="leafB" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#1D5527"/><stop offset="1" stop-color="#3F8C42"/>
+              </linearGradient>
+              <clipPath id="crownClip"><use href="#crown"/></clipPath>
+              <filter id="blur14" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter>
+              <clipPath id="bowlClip"><path d="M229 300 C229 392 330 440 464 440 C598 440 699 392 699 300 A235 62 0 0 1 229 300Z"/></clipPath>
+              <clipPath id="wholeClip"><circle cx="672" cy="292" r="162"/></clipPath>
+            </defs>
+
+            <!-- palm fronds behind (slightly defocused) -->
+            <g id="fronds" filter="url(#dof)"></g>
+
+            <!-- ground shadow -->
+            <ellipse cx="480" cy="446" rx="330" ry="26" fill="#05170A" opacity=".6" filter="url(#shadow)"/>
+
+            <!-- whole coconut behind, right -->
+            <g>
+              <circle cx="672" cy="292" r="162" fill="url(#wholeG)" filter="url(#husk)"/>
+              <g id="fibresWhole" clip-path="url(#wholeClip)"></g>
+              <g clip-path="url(#wholeClip)">
+                <path d="M560 180 C600 140 680 128 740 150" stroke="#C38A52" stroke-width="10" fill="none" opacity=".35" filter="url(#soft)"/>
+                <circle cx="740" cy="360" r="160" fill="#120A04" opacity=".35" filter="url(#shadow)"/>
+              </g>
+            </g>
+
+            <!-- second half, leaning back on the left -->
+            <g transform="rotate(-18 210 318)">
+              <ellipse cx="210" cy="318" rx="128" ry="136" fill="url(#wholeG2)" filter="url(#husk)"/>
+              <g id="fibresL"></g>
+              <ellipse cx="216" cy="312" rx="112" ry="120" fill="#2A160A"/>
+              <ellipse cx="216" cy="312" rx="106" ry="114" fill="url(#fleshG2)"/>
+              <ellipse cx="222" cy="306" rx="80" ry="88" fill="url(#cavityG)"/>
+              <path d="M150 250 C170 220 210 206 250 210" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".9" filter="url(#soft1)"/>
+            </g>
+
+            <!-- halved coconut: husk bowl -->
+            <path d="M229 300 C229 392 330 440 464 440 C598 440 699 392 699 300 A235 62 0 0 1 229 300Z" fill="url(#shellG)" filter="url(#husk)"/>
+            <g id="fibresBowl" clip-path="url(#bowlClip)"></g>
+            <g clip-path="url(#bowlClip)">
+              <ellipse cx="350" cy="350" rx="70" ry="40" fill="#C99258" opacity=".35" filter="url(#shadow)"/>
+              <path d="M700 300 C690 380 600 432 470 438" stroke="#0C0603" stroke-width="40" fill="none" opacity=".45" filter="url(#shadow)"/>
+            </g>
+            <!-- rim: hard shell → white flesh → pool of cream -->
+            <g id="hairRim"></g>
+            <ellipse cx="464" cy="300" rx="235" ry="62" fill="#2A160A"/>
+            <ellipse cx="464" cy="300" rx="228" ry="58" fill="url(#fleshG)"/>
+            <ellipse cx="464" cy="301" rx="207" ry="50" fill="url(#innerWall)"/>
+            <ellipse cx="464" cy="308" rx="200" ry="44" fill="url(#poolG)"/>
+            <!-- ripples -->
+            <g fill="none" stroke="#D8CFBC" stroke-width="2.2" opacity=".8">
+              <ellipse cx="466" cy="306" rx="176" ry="36"/>
+              <ellipse cx="466" cy="305" rx="155" ry="30" stroke="#FFFFFF" stroke-width="3"/>
+            </g>
+
+            <!-- splash: back crown (depth) -->
+            <path fill="url(#backCrownG)" d="M352 302 C350 270 340 230 338 200 C337 190 349 190 350 200 C356 230 372 240 384 226 C396 205 412 160 424 128 C428 120 438 122 438 132 C440 170 452 196 470 192 C486 188 494 146 506 112 C510 104 520 106 520 116 C520 160 530 196 548 200 C566 204 580 170 592 146 C596 138 606 142 604 150 C598 190 590 250 588 302 Z"/>
+
+            <!-- splash: front crown -->
+            <path id="crown" fill="url(#crownG)" d="M329 304
+              C326 262 304 218 290 172 C287 160 300 156 305 168
+              C318 200 340 218 358 204 C372 186 374 132 386 96 C389 86 401 88 401 99
+              C405 140 418 176 440 172 C454 168 455 112 464 62 C467 50 481 50 482 63
+              C489 112 492 160 506 172 C526 182 536 142 545 106 C548 95 560 95 560 107
+              C563 150 575 196 596 202 C612 206 626 190 638 166 C643 156 655 160 651 171
+              C638 216 612 262 600 304
+              A136 30 0 0 1 329 304 Z"/>
+            <use href="#crown" fill="url(#crownShade)" opacity=".7"/>
+            <!-- crown volume: soft shadows + highlights, clipped to the crown -->
+            <g clip-path="url(#crownClip)">
+              <g filter="url(#blur14)">
+                <ellipse cx="318" cy="262" rx="34" ry="70" fill="#A89C84" opacity=".55"/>
+                <ellipse cx="622" cy="236" rx="40" ry="96" fill="#9A8E77" opacity=".6"/>
+                <ellipse cx="360" cy="238" rx="18" ry="34" fill="#BFB49E" opacity=".45"/>
+                <ellipse cx="438" cy="210" rx="16" ry="34" fill="#BFB49E" opacity=".4"/>
+                <ellipse cx="514" cy="214" rx="16" ry="36" fill="#BFB49E" opacity=".45"/>
+                <ellipse cx="590" cy="232" rx="18" ry="36" fill="#AFA48D" opacity=".5"/>
+                <ellipse cx="465" cy="292" rx="140" ry="16" fill="#C9BEA7" opacity=".55"/>
+                <ellipse cx="462" cy="190" rx="34" ry="110" fill="#FFFFFF" opacity=".9"/>
+              </g>
+              <g fill="none" stroke="#FFFFFF" stroke-linecap="round" filter="url(#soft1)">
+                <path d="M300 180 C314 214 324 252 338 292" stroke-width="6"/>
+                <path d="M391 108 C393 148 398 180 410 214" stroke-width="4.5"/>
+                <path d="M470 78 C471 120 474 170 480 236" stroke-width="6"/>
+                <path d="M552 118 C554 150 558 178 564 200" stroke-width="3.5"/>
+              </g>
+            </g>
+            <use href="#crown" fill="none" stroke="#D3C8B2" stroke-width="1.6" opacity=".9"/>
+            <!-- crown base meniscus -->
+            <path d="M329 304 A136 30 0 0 0 600 304" fill="none" stroke="#FFFFFF" stroke-width="4" opacity=".9" filter="url(#soft1)"/>
+            <path d="M335 314 A132 24 0 0 0 596 314" fill="none" stroke="#CFC4AE" stroke-width="3" opacity=".7" filter="url(#soft1)"/>
+
+            <!-- droplets -->
+            <g id="drops"></g>
+
+            <!-- flesh rim specular -->
+            <path d="M250 292 C270 262 340 244 400 240" stroke="#FFFFFF" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9" filter="url(#soft1)"/>
+            <path d="M684 316 C660 344 600 358 540 362" stroke="#B9AD96" stroke-width="4" fill="none" stroke-linecap="round" opacity=".6" filter="url(#soft1)"/>
+          </svg>
+        </div>
+
+        <!-- 22% FAT seal -->
+        <svg class="seal" viewBox="0 0 200 200" aria-label="22% fat">
+          <defs>
+            <radialGradient id="sealG" cx=".38" cy=".32" r=".8">
+              <stop offset="0" stop-color="var(--gold-lt)"/><stop offset=".5" stop-color="var(--gold)"/><stop offset="1" stop-color="var(--gold-dk)"/>
+            </radialGradient>
+          </defs>
+          <path id="sealStar" fill="url(#sealG)"/>
+          <circle cx="100" cy="100" r="78" fill="none" stroke="#7A5A1A" stroke-width="2.4" stroke-dasharray="1 5.5" stroke-linecap="round"/>
+          <circle cx="100" cy="100" r="70" fill="none" stroke="#7A5A1A" stroke-width="1.6" opacity=".7"/>
+          <text x="100" y="112" text-anchor="middle" font-family="Fraunces, serif" font-style="italic" font-weight="900" font-size="64" fill="var(--front-bg)">22%</text>
+          <text x="100" y="146" text-anchor="middle" font-family="Inter, sans-serif" font-weight="800" font-size="25" letter-spacing="7" fill="var(--front-bg)">FAT</text>
+          <path d="M60 64 Q100 46 140 64" stroke="#fff" stroke-width="5" fill="none" opacity=".45" stroke-linecap="round"/>
+        </svg>
+
+        <div class="netqty"><small>Net Qty.</small><b>400 ml</b></div>
+      </div>
+      <i class="edge l"></i><i class="edge r"></i>
+    </section>
+
+    <!-- ======================================================
+         PANEL C — LEGAL / INFO
+         ====================================================== -->
+    <section class="panel p-legal" id="p-legal"><div class="in">
+      <div class="serve">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <circle cx="32" cy="32" r="31" fill="var(--gold)"/>
+          <path d="M13 32 H51 C51 43 43 50 32 50 C21 50 13 43 13 32Z" fill="var(--cream)"/>
+          <path d="M11 32 H53" stroke="var(--green-ink)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M26 26 C24 22 28 19 26 14 M33 26 C31 22 35 19 33 14 M40 26 C38 22 42 19 40 14" stroke="var(--green-ink)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span>Perfect for <b>curries, desserts, smoothies &amp; baking</b></span>
+      </div>
+
+      <p><span class="lbl">Storage:</span> Store in a cool and dry place, away from direct sunlight. Do not consume if the seal is broken, leaking or the tin is puffed. Refrigerate after opening and use within 3 days.</p>
+      <p class="shake">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8 C2 11 2 13 4 16 M20 8 C22 11 22 13 20 16" stroke="var(--gold-dk)" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="7.5" y="4" width="9" height="16" rx="1.5" fill="var(--green-ink)"/><rect x="7.5" y="8" width="9" height="8" fill="var(--gold)"/></svg>
+        Shake well before use</p>
+      <p><b>Best before 12 months from the date of packaging.</b></p>
+
+      <div class="party">
+        <!-- FSSAI LOGO PLACEHOLDER — replace with the official artwork -->
+        <svg class="fssai" viewBox="0 0 95 64" aria-label="FSSAI logo placeholder">
+          <rect x="1" y="1" width="93" height="62" rx="5" fill="#fff" stroke="#8a8170" stroke-width="2" stroke-dasharray="5 3"/>
+          <text x="47.5" y="31" text-anchor="middle" font-family="Inter" font-weight="800" font-size="20" fill="#3D3D3D">FSSAI</text>
+          <text x="47.5" y="50" text-anchor="middle" font-family="Inter" font-weight="600" font-size="11" fill="#8a8170">LOGO</text>
+        </svg>
+        <p><span class="lbl">Marketed by:</span> <b>FreshNet Farms Pvt Ltd</b>, No.4, Palladam Road, LIG Colony, Kerala Samajam, Pollachi – 642002, Tamil Nadu, India.<br><b>FSSAI Lic. No. 12423999000198</b></p>
+      </div>
+      <p><span class="lbl">Manufactured by:</span> <b>Sakthi Coco Products</b>, Unit No. 9/2, Sakthi Industrial Estate, Udumalpet Road – 642 003, Tamil Nadu, India.<br><b>FSSAI Lic. No. 12422999001472</b></p>
+      <p><span class="lbl">Consumer care:</span><br><span style="white-space:nowrap">+91 98851 01870 | freshnetfarms@gmail.com</span><br><span class="lbl">Country of origin:</span> India</p>
+
+      <div class="row-bottom">
+        <!-- INKJET AREA — printed on the line at packing -->
+        <div class="inkjet">
+          <div><b>MRP ₹</b><br><em>(incl. of all taxes)</em></div>
+          <div><b>Unit sale price ₹</b><br><em>per ml</em></div>
+          <div><b>Batch No.:</b></div>
+          <div><b>Pkd. on:</b></div>
+        </div>
+        <div class="barcode">GS1 BARCODE<br>– REPLACE –</div>
+      </div>
+    </div></section>
+
+    <!-- ======================================================
+         PANEL D — GLUE OVERLAP (keep empty)
+         ====================================================== -->
+    <section class="panel p-overlap" id="p-overlap"></section>
+
+    <div class="guides" id="guides"></div>
+  </div>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   Deterministic art generators: palm fronds, droplets, seal edge,
+   crop marks, guides. Pure geometry – no randomness between renders.
+   ------------------------------------------------------------------ */
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; };
+const f1 = n => n.toFixed(1);
+
+// Palm frond: rachis is a quadratic curve from base (x,y) with heading `ang` (deg),
+// leaflets hang off both sides, longest in the middle, drooping with "gravity".
+function frond(g, { x, y, ang, len, bend, leaf, fillA, fillB, n = 26, droop = 0.35, width = 0.11, rachis }) {
+  const a = ang * Math.PI / 180;
+  const p0 = [x, y], p2 = [x + Math.cos(a) * len, y + Math.sin(a) * len];
+  const p1 = [x + Math.cos(a) * len * .5 - Math.sin(a) * bend, y + Math.sin(a) * len * .5 + Math.cos(a) * bend];
+  const P = t => [(1-t)*(1-t)*p0[0] + 2*(1-t)*t*p1[0] + t*t*p2[0], (1-t)*(1-t)*p0[1] + 2*(1-t)*t*p1[1] + t*t*p2[1]];
+  const T = t => { const dx = 2*(1-t)*(p1[0]-p0[0]) + 2*t*(p2[0]-p1[0]), dy = 2*(1-t)*(p1[1]-p0[1]) + 2*t*(p2[1]-p1[1]); const m = Math.hypot(dx, dy); return [dx/m, dy/m]; };
+  for (const side of [-1, 1]) {
+    let d = '';
+    for (let i = 0; i < n; i++) {
+      const t = 0.1 + 0.9 * i / (n - 1);
+      const [px, py] = P(t), [tx, ty] = T(t);
+      const spread = (62 - 30 * t) * Math.PI / 180 * side;
+      let dx = tx * Math.cos(spread) - ty * Math.sin(spread), dy = tx * Math.sin(spread) + ty * Math.cos(spread);
+      dy += droop; const m = Math.hypot(dx, dy); dx /= m; dy /= m;
+      const L = leaf * Math.pow(Math.sin(Math.PI * (0.12 + 0.88 * t)), 0.7) * (1 - 0.35 * t);
+      const w = L * width, nx = -dy, ny = dx;
+      const qx = px + dx * L, qy = py + dy * L + L * 0.12;
+      const mx = px + dx * L * .45, my = py + dy * L * .45;
+      d += `M${f1(px)} ${f1(py)}Q${f1(mx + nx*w)} ${f1(my + ny*w)} ${f1(qx)} ${f1(qy)}Q${f1(mx - nx*w*.35)} ${f1(my - ny*w*.35)} ${f1(px)} ${f1(py)}Z`;
+    }
+    el('path', { d, fill: side < 0 ? fillA : fillB }, g);
+  }
+  if (rachis) el('path', { d: `M${p0}Q${p1} ${p2}`, fill: 'none', stroke: rachis, 'stroke-width': 3, 'stroke-linecap': 'round' }, g);
+}
+
+// hero fronds (behind the coconut)
+const fr = document.getElementById('fronds');
+frond(fr, { x: 470, y: 300, ang: -176, len: 520, bend: 40, leaf: 150, width: .15, fillA: 'url(#leafB)', fillB: 'url(#leafA)', rachis: '#8BC06A', n: 30, droop: .3 });
+frond(fr, { x: 460, y: 290, ang: -148, len: 430, bend: 80, leaf: 135, width: .15, fillA: 'url(#leafA)', fillB: 'url(#leafB)', rachis: '#8BC06A', n: 26, droop: .3 });
+frond(fr, { x: 470, y: 300, ang: -4, len: 520, bend: -40, leaf: 150, width: .15, fillA: 'url(#leafA)', fillB: 'url(#leafB)', rachis: '#8BC06A', n: 30, droop: .3 });
+frond(fr, { x: 480, y: 290, ang: -32, len: 430, bend: -80, leaf: 135, width: .15, fillA: 'url(#leafB)', fillB: 'url(#leafA)', rachis: '#8BC06A', n: 26, droop: .3 });
+
+// seeded PRNG so fibres are identical on every render
+let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+// husk fibres on the bowl: meridians running from the rim to the bottom pole
+(() => {
+  const g = document.getElementById('fibresBowl');
+  for (let i = 0; i < 220; i++) {
+    const phi = rnd() * 2 - 1, x0 = 464 + 235 * phi, y0 = 300 + 62 * Math.sqrt(1 - phi * phi);
+    const j = (rnd() - .5) * 14, light = rnd() < .38;
+    el('path', { d: `M${f1(x0)} ${f1(y0)}Q${f1(464 + 250 * phi + j)} ${f1(420 + j)} ${f1(464 + 30 * phi)} ${f1(446)}`, fill: 'none',
+      stroke: light ? '#C08A52' : '#1E1007', 'stroke-width': f1(.8 + rnd() * 2.2), opacity: f1(.18 + rnd() * .4), 'stroke-dasharray': `${f1(10 + rnd() * 40)} ${f1(4 + rnd() * 18)}` }, g);
+  }
+})();
+// fibres on the whole coconut and the left half (curved meridians)
+for (const [id, cx, cy, r, n] of [['fibresWhole', 672, 292, 162, 200], ['fibresL', 210, 318, 132, 130]]) {
+  const g = document.getElementById(id);
+  for (let i = 0; i < n; i++) {
+    const phi = rnd() * 2 - 1, bow = r * phi * 1.25, light = rnd() < .4;
+    el('path', { d: `M${f1(cx + phi * r * .15)} ${f1(cy - r)}Q${f1(cx + bow)} ${f1(cy)} ${f1(cx + phi * r * .15)} ${f1(cy + r)}`, fill: 'none',
+      stroke: light ? '#C69159' : '#1A0D05', 'stroke-width': f1(.8 + rnd() * 2), opacity: f1(.15 + rnd() * .35), 'stroke-dasharray': `${f1(8 + rnd() * 30)} ${f1(4 + rnd() * 14)}` }, g);
+  }
+}
+// hairy cut edge of the bowl
+(() => {
+  const g = document.getElementById('hairRim');
+  for (let i = 0; i < 260; i++) {
+    const a = rnd() * Math.PI * 2, x = 464 + 236 * Math.cos(a), y = 300 + 63 * Math.sin(a), l = 4 + rnd() * 9, oa = a + (rnd() - .5) * .8;
+    el('path', { d: `M${f1(x)} ${f1(y)}l${f1(Math.cos(oa) * l)} ${f1(Math.sin(oa) * l * .5)}`, stroke: rnd() < .5 ? '#3A2210' : '#8A5A2E', 'stroke-width': f1(.8 + rnd() * 1.4), 'stroke-linecap': 'round', opacity: '.85' }, g);
+  }
+})();
+
+// subtle palm silhouettes at the front panel edges (background SVG coords: 0..928 × -30..1030)
+const ps = document.getElementById('palm-sil');
+frond(ps, { x: -60, y: -60, ang: 62, len: 560, bend: -120, leaf: 150, fillA: 'var(--palm-sil)', fillB: 'var(--palm-sil)', n: 24, droop: .25 });
+frond(ps, { x: -80, y: 120, ang: 28, len: 380, bend: -60, leaf: 110, fillA: 'var(--palm-sil)', fillB: 'var(--palm-sil)', n: 20, droop: .25 });
+frond(ps, { x: 990, y: -60, ang: 118, len: 560, bend: 120, leaf: 150, fillA: 'var(--palm-sil)', fillB: 'var(--palm-sil)', n: 24, droop: .25 });
+frond(ps, { x: 1010, y: 120, ang: 152, len: 380, bend: 60, leaf: 110, fillA: 'var(--palm-sil)', fillB: 'var(--palm-sil)', n: 20, droop: .25 });
+
+// cream droplets above the crown spikes
+const drops = document.getElementById('drops');
+[[294,134,10],[392,68,9],[474,40,10],[553,76,8],[652,132,9],[428,58,4.5],[520,52,5],[338,104,5],[614,100,4.5],[262,196,5],[690,190,4]].forEach(([cx, cy, r]) => {
+  el('ellipse', { cx, cy, rx: r, ry: r * 1.12, fill: 'url(#dropG)' }, drops);
+  el('ellipse', { cx: cx - r * .35, cy: cy - r * .4, rx: r * .28, ry: r * .2, fill: '#fff' }, drops);
+});
+
+// seal: 32-point scalloped edge
+(() => { let d = ''; const N = 64; for (let i = 0; i <= N; i++) { const a = i / N * Math.PI * 2, r = i % 2 ? 92 : 99; d += (i ? 'L' : 'M') + f1(100 + r * Math.cos(a)) + ' ' + f1(100 + r * Math.sin(a)); } document.getElementById('sealStar').setAttribute('d', d + 'Z'); })();
+
+// crop marks, fold marks + optional guides — all derived from the CSS variables
+(() => {
+  const mm = v => { const p = document.createElement('div'); p.style.width = v; document.body.appendChild(p); const w = p.getBoundingClientRect().width; p.remove(); return w; };
+  const cs = getComputedStyle(document.documentElement), px1mm = mm('100mm') / 100;
+  const val = n => { const v = cs.getPropertyValue(n).trim(); return /mm$/.test(v) ? parseFloat(v) : mm(v) / px1mm; }; // dieline vars are in mm
+  const slug = val('--slug'), bleed = val('--bleed'), W = val('--trim-w'), O = val('--overlap'), H = val('--label-h'), safe = val('--safe');
+  const k = ['--k-nutri', '--k-front'].map(n => parseFloat(cs.getPropertyValue(n)));
+  const x0 = slug + bleed, y0 = slug + bleed, x1 = x0 + W + O, y1 = y0 + H, gap = bleed + 1, L = slug - bleed - 2;
+  const marks = document.getElementById('marks'), hair = 0.1; // 0.1 mm ≈ 0.28 pt
+  const line = (x, y, w, h) => { const i = document.createElement('i'); Object.assign(i.style, { left: x + 'mm', top: y + 'mm', width: w + 'mm', height: h + 'mm' }); marks.appendChild(i); };
+  for (const x of [x0, x1]) { line(x - hair/2, y0 - gap - L, hair, L); line(x - hair/2, y1 + gap, hair, L); }
+  for (const y of [y0, y1]) { line(x0 - gap - L, y - hair/2, L, hair); line(x1 + gap, y - hair/2, L, hair); }
+  // fold / panel-division marks (short, outside bleed)
+  const folds = [x0 + W * k[0], x0 + W * (k[0] + k[1]), x0 + W];
+  for (const x of folds) { line(x - hair/2, y0 - gap - 4, hair, 4); line(x - hair/2, y1 + gap, hair, 4); }
+  // guides overlay (trim-relative)
+  const g = document.getElementById('guides');
+  for (const x of [W * k[0], W * (k[0] + k[1]), W]) { const i = document.createElement('i'); i.style.left = x + 'mm'; g.appendChild(i); }
+  const s = document.createElement('div'); s.className = 'safe'; Object.assign(s.style, { left: safe + 'mm', top: safe + 'mm', width: (W - 2 * safe) + 'mm', height: (H - 2 * safe) + 'mm' }); g.appendChild(s);
+  if (/[?&]guides/.test(location.search)) document.body.classList.add('show-guides');
+  window.__dims = { slug, bleed, W, O, H, safe, k };
+})();
+</script>
+</body>
+</html>
