@@ -1,7 +1,9 @@
 # FreshNet Farms site icon (favicon)
 
 These files replace the grey globe that Google shows next to freshnet.in in
-search results. The mark is the palm-and-"F" from the FreshNet logo.
+search results. The icon is "FN" in white on FreshNet green, using the F and N
+letterforms from the FreshNet logo. `source/fn-icon-options.png` shows the
+brown and white alternatives.
 
 ## 1. Upload
 
