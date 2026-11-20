@@ -1,0 +1,1040 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FreshNet Farms — Coconut Product Catalogue</title>
+<style>
+@font-face{font-family:"Fraunces";src:url(fonts/fraunces.woff2) format("woff2");font-weight:300 900;font-style:normal}
+@font-face{font-family:"Fraunces";src:url(fonts/fraunces-italic.woff2) format("woff2");font-weight:300 900;font-style:italic}
+@font-face{font-family:"Jakarta";src:url(fonts/jakarta.woff2) format("woff2");font-weight:300 800}
+:root{--cocoa:#2B170B;--brown:#5E3614;--bark:#7A4A22;--cream:#F8F2E7;--sand:#EFE5D3;--line:#E2D5BE;--leaf:#8AB43F;--leaf-dk:#3E6A1F;--gold:#E2A42B;--ink:#2B170B;--muted:#6E5A49}
+@page{size:A4;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#cfc6b8}
+body{font-family:"Jakarta",system-ui,sans-serif;color:var(--ink);font-size:9pt;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:210mm;height:297mm;position:relative;overflow:hidden;background:#fff;margin:0 auto 10mm;break-after:page}
+@media print{.page{margin:0}html,body{background:#fff}}
+img{display:block}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:600;letter-spacing:-.01em;line-height:1.05}
+em{font-style:italic}
+
+/* chrome */
+.top{position:absolute;top:11mm;left:16mm;right:20mm;display:flex;align-items:center;justify-content:space-between}
+.top img{height:9mm}
+.crumb{font-size:6.8pt;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);display:flex;gap:3mm;align-items:center}
+.crumb b{color:var(--leaf-dk)}
+.crumb i{width:6mm;height:1px;background:var(--line)}
+.bot{position:absolute;bottom:8mm;left:16mm;right:20mm;display:flex;justify-content:space-between;align-items:center;font-size:6.6pt;color:var(--muted);letter-spacing:.06em;border-top:1px solid var(--line);padding-top:2.2mm}
+.bot .pn{font-family:"Fraunces";font-size:10pt;color:var(--brown);font-weight:600}
+.tab{position:absolute;right:0;width:8mm;height:50mm;color:var(--cream);display:flex;align-items:center;justify-content:center;border-radius:3mm 0 0 3mm}
+.tab span{transform:rotate(90deg);white-space:nowrap;font-size:6.2pt;letter-spacing:.28em;text-transform:uppercase;font-weight:700}
+.t1{top:30mm;background:var(--brown)}.t2{top:85mm;background:var(--bark)}.t3{top:140mm;background:var(--leaf-dk)}.t4{top:195mm;background:#B07A1A}
+.c{position:absolute;top:26mm;left:16mm;right:20mm;bottom:17mm}
+
+/* type bits */
+.kicker{font-size:6.6pt;letter-spacing:.24em;text-transform:uppercase;color:var(--leaf-dk);font-weight:800;margin-bottom:1.2mm}
+.h2{font-size:21pt;color:var(--brown)}
+.h2 em{color:var(--leaf-dk)}
+.hsn{display:inline-flex;align-items:center;gap:1.4mm;font-size:6.6pt;font-weight:700;letter-spacing:.08em;color:var(--brown);background:var(--sand);border-radius:10mm;padding:.7mm 2.4mm;white-space:nowrap}
+.hsn::before{content:"";width:1.5mm;height:1.5mm;border-radius:50%;background:var(--leaf)}
+.lead{font-size:9.4pt;color:#3d2a1c}
+p{color:#3d2a1c}
+.subh{font-size:6.6pt;letter-spacing:.24em;text-transform:uppercase;color:var(--leaf-dk);font-weight:800;margin:0 0 2mm;display:flex;align-items:center;gap:3mm}
+.subh::after{content:"";flex:1;height:1px;background:var(--line)}
+.row{display:flex;align-items:flex-end;justify-content:space-between;gap:4mm}
+
+/* product block */
+.pb{display:grid;grid-template-columns:64mm 1fr;gap:7mm}
+.pb.rev{grid-template-columns:1fr 64mm}.pb.rev .pics{order:2}
+.pics{display:grid;gap:2mm;align-content:start}
+.pics img{width:100%;object-fit:cover;border-radius:3mm}
+.pics img.big{height:50mm;border-radius:14mm 3mm 3mm 3mm}
+.pb.rev .pics img.big{border-radius:3mm 14mm 3mm 3mm}
+.pics .duo{display:grid;grid-template-columns:1fr 1fr;gap:2mm}
+.pics .duo img{height:26mm}
+.pb h3{font-size:16pt;color:var(--brown);margin-bottom:1.4mm}
+.pb .lead{font-size:8.7pt;margin:1.6mm 0 2.4mm}
+.specs{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.specs div{display:flex;justify-content:space-between;gap:2mm;padding:1.25mm 1mm;border-bottom:1px solid var(--line);font-size:7.5pt}
+.specs div:nth-child(odd){margin-right:2.5mm}
+.specs dt{color:var(--muted)}
+.specs dd{font-weight:700;color:var(--brown);text-align:right}
+.specs.one{grid-template-columns:1fr}.specs.one div:nth-child(odd){margin-right:0}
+.pack{display:flex;flex-wrap:wrap;gap:1.6mm;margin-top:2.4mm}
+.chip{display:inline-flex;align-items:center;gap:1.4mm;font-size:6.9pt;font-weight:600;color:var(--leaf-dk);border:1px solid #cfe0b4;background:#F3F8EA;border-radius:10mm;padding:.8mm 2.6mm}
+.chip.b{color:var(--brown);border-color:var(--line);background:var(--cream)}
+.chip svg{width:3mm;height:3mm}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--line) 12%,var(--line) 88%,transparent);margin:5mm 0}
+.note{background:var(--cream);border-left:1.2mm solid var(--leaf);border-radius:0 2mm 2mm 0;padding:2mm 3.2mm;font-size:7.8pt;margin-top:3mm}
+.note b{color:var(--leaf-dk);font-size:6.3pt;letter-spacing:.2em;text-transform:uppercase;display:block;margin-bottom:.4mm}
+.cap{font-size:6.4pt;color:var(--muted);margin-top:.8mm}
+
+/* tables */
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:7.4pt}
+th,td{padding:1.35mm 1.8mm;text-align:center}
+thead th{background:var(--brown);color:var(--cream);font-weight:700}
+thead .g th{background:var(--cocoa);font-size:6.3pt;letter-spacing:.2em;text-transform:uppercase;padding:1.1mm}
+thead .g th.me{background:var(--bark)}thead .g th.eu{background:var(--leaf-dk)}
+tbody td:first-child{text-align:left;font-weight:600;color:var(--brown)}
+tbody tr:nth-child(odd) td{background:var(--cream)}
+tbody td{border-bottom:1px solid #f0e8da}
+tbody td small{display:block;font-weight:400;color:var(--muted);font-size:6pt;line-height:1.2}
+.tw{border-radius:3mm;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+.tw.left td{text-align:left}
+
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:2mm}
+.tile{background:var(--cream);border-radius:3mm;padding:2.4mm 2.8mm;border:1px solid var(--line)}
+.tile .v{font-family:"Fraunces";font-size:12pt;font-weight:600;color:var(--brown);line-height:1.1}
+.tile .l{font-size:6pt;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:.7mm;font-weight:600}
+.tile.hl{background:var(--leaf-dk);border-color:var(--leaf-dk)}.tile.hl .v{color:#fff}.tile.hl .l{color:#d7e8c0}
+.tile.au{background:var(--gold);border-color:var(--gold)}.tile.au .l{color:#3b2a0a}
+
+/* cover */
+.cover{background:var(--cocoa);color:var(--cream)}
+.cover .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%}
+.cover .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,23,11,.55) 0%,rgba(43,23,11,0) 22%,rgba(43,23,11,0) 42%,rgba(43,23,11,.8) 62%,#2B170B 82%)}
+.cover .logo-card{position:absolute;top:0;left:16mm;background:#fff;padding:12mm 9mm 8mm;border-radius:0 0 8mm 8mm;box-shadow:0 6mm 14mm -8mm rgba(0,0,0,.5)}
+.cover .logo-card img{width:60mm}
+.cover .pill{position:absolute;top:14mm;right:16mm;font-size:7pt;letter-spacing:.3em;text-transform:uppercase;background:rgba(43,23,11,.75);padding:2mm 4mm;border-radius:10mm}
+.cover .stamp{position:absolute;top:118mm;right:14mm;width:40mm;height:40mm}
+.cover .txt{position:absolute;left:16mm;right:16mm;bottom:20mm}
+.eyebrow{display:flex;align-items:center;gap:3mm;font-size:7.4pt;letter-spacing:.32em;text-transform:uppercase;color:var(--leaf);font-weight:700}
+.eyebrow::before{content:"";width:12mm;height:1.4px;background:var(--leaf)}
+.cover h1{font-size:46pt;font-weight:500;margin:5mm 0 5mm;line-height:.96;letter-spacing:-.02em}
+.cover h1 em{color:var(--gold);font-weight:400}
+.cover .sub{display:flex;justify-content:space-between;align-items:flex-end;gap:8mm;border-top:1px solid rgba(248,242,231,.25);padding-top:4.5mm}
+.cover .sub p{color:#e8dccb;font-size:9pt;max-width:85mm}
+.cats{display:flex;flex-wrap:wrap;gap:1.6mm;justify-content:flex-end;max-width:90mm}
+.cats span{font-size:6.6pt;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(248,242,231,.35);border-radius:10mm;padding:1mm 2.6mm;color:var(--cream)}
+.cover .credit{position:absolute;left:16mm;bottom:9mm;font-size:6pt;color:#a8957c;letter-spacing:.06em}
+.strip{position:absolute;left:0;right:0;bottom:0;height:4mm;background:linear-gradient(90deg,var(--leaf) 0 40%,var(--gold) 40% 62%,var(--bark) 62%)}
+
+/* about */
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:2.4mm}
+.fact{background:#fff;border:1px solid var(--line);border-radius:3mm;padding:2.6mm 3mm}
+.fact .v{font-family:"Fraunces";font-size:13pt;font-weight:600;color:var(--brown);line-height:1.1}
+.fact .l{font-size:6.3pt;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.8mm;font-weight:600}
+.photo-cap{position:relative}
+.photo-cap img{width:100%;object-fit:cover;border-radius:4mm}
+.photo-cap span{position:absolute;left:3mm;bottom:3mm;background:rgba(43,23,11,.78);color:var(--cream);font-size:6.4pt;letter-spacing:.1em;text-transform:uppercase;padding:1mm 2.4mm;border-radius:10mm}
+
+/* story */
+.story{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:auto;gap:3.2mm}
+.step{position:relative}
+.step img{width:100%;height:50mm;object-fit:cover;border-radius:3.5mm}
+.step .n{position:absolute;top:2.5mm;left:2.5mm;width:9mm;height:9mm;border-radius:50%;background:var(--leaf);color:#fff;font-family:"Fraunces";font-weight:700;font-size:10pt;display:flex;align-items:center;justify-content:center;border:.8mm solid #fff}
+.step b{display:block;font-size:8.6pt;color:var(--brown);margin-top:1.6mm}
+.step small{display:block;font-size:7.3pt;color:var(--muted);line-height:1.4}
+
+/* index */
+.ix td{text-align:left}
+.ix td:last-child,.ix th:last-child{text-align:right}
+.ix .sec td{background:var(--sand)!important;font-size:6.5pt;letter-spacing:.2em;text-transform:uppercase;color:var(--leaf-dk);font-weight:800}
+
+/* opener */
+.opener{background:var(--cocoa);color:var(--cream)}
+.opener .mosaic{position:absolute;top:28mm;left:16mm;right:16mm;height:152mm;display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:3mm}
+.opener .mosaic img{width:100%;height:100%;object-fit:cover;border-radius:4mm}
+.opener .mosaic img:first-child{grid-row:span 2;border-radius:30mm 4mm 4mm 4mm}
+.opener .fade{position:absolute;top:130mm;left:0;right:0;height:52mm;background:linear-gradient(180deg,rgba(43,23,11,0),rgba(43,23,11,.9) 70%,var(--cocoa))}
+.opener .logo{position:absolute;top:11mm;left:16mm;height:11mm}
+.opener .no{position:absolute;left:16mm;top:150mm;font-family:"Fraunces";font-size:110pt;font-weight:300;line-height:.8;color:transparent;-webkit-text-stroke:1.2px var(--leaf)}
+.opener .body{position:absolute;left:16mm;right:20mm;top:194mm}
+.opener h1{font-size:38pt;font-weight:500;line-height:1}
+.opener h1 em{color:var(--gold);font-weight:400}
+.opener p{max-width:125mm;margin-top:4mm;font-size:9.6pt;color:#e8dccb}
+.opener .list{position:absolute;left:16mm;right:20mm;bottom:15mm;display:flex;flex-wrap:wrap;gap:1.6mm}
+.opener .list span{font-size:6.6pt;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(248,242,231,.3);border-radius:10mm;padding:1mm 2.6mm}
+
+/* back */
+.back{background:var(--cocoa);color:var(--cream)}
+.back .glow{position:absolute;width:230mm;height:230mm;border-radius:50%;left:-20mm;top:-70mm;background:radial-gradient(circle,rgba(138,180,63,.22),transparent 62%)}
+.back .logo{position:absolute;top:26mm;left:0;right:0;margin:0 auto;width:90mm}
+.back .cta{position:absolute;top:72mm;left:18mm;right:18mm;text-align:center}
+.back .cta h2{font-size:30pt;font-weight:400;line-height:1.05}
+.back .cta h2 em{color:var(--gold)}
+.back .cta p{margin:3.5mm auto 0;max-width:135mm;color:#dccfbd;font-size:9.4pt}
+.sites{position:absolute;left:16mm;right:16mm;top:126mm;display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+.site{border:1px solid rgba(248,242,231,.18);background:rgba(248,242,231,.05);border-radius:5mm;padding:4.5mm 4.5mm}
+.site b{display:block;font-size:6.6pt;letter-spacing:.22em;text-transform:uppercase;color:var(--leaf);margin-bottom:1.8mm}
+.site p{font-size:8pt;line-height:1.5;color:#efe6d8}
+.site .ph{margin-top:2.2mm;font-weight:700;color:#fff}
+.contact{position:absolute;left:16mm;right:16mm;top:180mm;display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.contact>div{background:var(--leaf);color:var(--cocoa);border-radius:5mm;padding:4.5mm 6mm;display:flex;align-items:center;gap:4mm}
+.contact>div:last-child{background:var(--gold)}
+.contact svg{width:8mm;height:8mm;flex:none}
+.contact small{display:block;font-size:6.2pt;letter-spacing:.24em;text-transform:uppercase;font-weight:800;opacity:.75;margin-bottom:.6mm}
+.contact span{font-family:"Fraunces";font-size:13pt;font-weight:600;white-space:nowrap}
+.reg{position:absolute;left:16mm;right:16mm;top:212mm;display:flex;justify-content:center;gap:8mm;font-size:7pt;color:#cbb9a2;letter-spacing:.08em}
+.reg b{color:var(--cream)}
+.credits{position:absolute;left:16mm;right:16mm;bottom:12mm;font-size:5.8pt;line-height:1.45;color:#a8957c}
+.credits b{color:#cbb9a2;letter-spacing:.18em;text-transform:uppercase;font-size:5.8pt}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14M5 7l-3 7a4 4 0 0 0 6 0zM19 7l-3 7a4 4 0 0 0 6 0z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></symbol>
+</svg>
+
+<!-- 1 COVER -->
+<section class="page cover">
+  <img class="bg" src="img/grove.jpg" alt="">
+  <div class="shade"></div>
+  <div class="logo-card"><img src="img/logo.png" alt="FreshNet Farms"></div>
+  <div class="pill">Coconut Catalogue · 2026</div>
+  <svg class="stamp" viewBox="0 0 200 200">
+    <defs><path id="circ" d="M100,100 m-76,0 a76,76 0 1,1 152,0 a76,76 0 1,1 -152,0"/></defs>
+    <circle cx="100" cy="100" r="98" fill="#8AB43F"/>
+    <circle cx="100" cy="100" r="60" fill="none" stroke="#fff" stroke-opacity=".5" stroke-dasharray="2 4"/>
+    <text font-family="Jakarta" font-size="15" font-weight="800" letter-spacing="4" fill="#2B170B"><textPath href="#circ">FARM DIRECT · EXPORT READY · POLLACHI ·</textPath></text>
+    <text x="100" y="96" text-anchor="middle" font-family="Fraunces" font-size="34" font-weight="700" fill="#fff">25</text>
+    <text x="100" y="117" text-anchor="middle" font-family="Jakarta" font-size="10" font-weight="800" letter-spacing="1.6" fill="#2B170B">COCONUT PRODUCTS</text>
+  </svg>
+  <div class="txt">
+    <div class="eyebrow">Building global markets for Indian farmers</div>
+    <h1>The Coconut<br><em>Product Catalogue</em></h1>
+    <div class="sub">
+      <p>Whole nuts, copra, oils, food ingredients and coir media — sourced from the coconut belt of Pollachi and packed at our own export packhouse.</p>
+      <div class="cats"><span>Whole coconuts</span><span>Copra &amp; oils</span><span>Food ingredients</span><span>Coir &amp; growing media</span></div>
+    </div>
+  </div>
+  <div class="credit">Cover: coconut harvest in the Pollachi region · photo FreshNet Farms</div>
+  <div class="strip"></div>
+</section>
+
+<!-- 2 ABOUT -->
+<section class="page" style="background:var(--cream)">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>About us</b><i></i>Who we are</div></div>
+  <div class="c" style="top:28mm">
+    <div class="kicker">FreshNet Farms Private Limited</div>
+    <p style="font-family:Fraunces;font-size:21pt;line-height:1.15;color:var(--brown);margin-bottom:5mm">A coconut value-chain company building a <em style="color:var(--leaf-dk)">global marketplace</em> for India’s smallholder coconut farmers.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7mm;margin-bottom:5mm">
+      <div>
+        <p style="margin-bottom:2.2mm">We work directly with smallholder farmers, aggregators, harvesters and processors across Tamil Nadu’s coconut belt, adding value at every step from grove to container — and raising farmers’ income on a per-unit basis.</p>
+        <p>Along the chain we create dignified jobs for rural youth and landless workers, training them into skilled harvesters, graders and packhouse staff.</p>
+      </div>
+      <div>
+        <p style="margin-bottom:2.2mm">From our export packhouse near Pollachi and our processing unit in Krishnagiri we supply whole coconuts, copra, oils, food ingredients and coir growing media, packed to domestic, Middle East and EU specifications.</p>
+        <p>FreshNet Farms is a portfolio partner of <b>Upaya Social Ventures</b> (since 2022) under its Dignified Jobs Accelerator.</p>
+      </div>
+    </div>
+    <div class="photo-cap" style="margin-bottom:5mm"><img src="img/warehouse.jpg" style="height:66mm;object-position:50% 55%"><span>Our export packhouse · Pollachi</span></div>
+    <div class="facts">
+      <div class="fact"><div class="v">2019</div><div class="l">Established</div></div>
+      <div class="fact"><div class="v">51–100</div><div class="l">People employed</div></div>
+      <div class="fact"><div class="v">3 sites</div><div class="l">Office · packhouse · processing</div></div>
+      <div class="fact"><div class="v">365 days</div><div class="l">Coconut supply, year-round</div></div>
+      <div class="fact"><div class="v">In-house</div><div class="l">Logistics management</div></div>
+      <div class="fact"><div class="v">ME · EU</div><div class="l">Export grades packed</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3mm;margin-top:4mm;font-size:7.4pt">
+      <div class="note" style="margin:0"><b>Founder &amp; CEO</b>Senthil Kumar — MBA (Agribusiness), TNAU; 15+ years in agribusiness strategy, farm procurement and supply chains across Asia-Pacific.</div>
+      <div class="note" style="margin:0"><b>Registrations</b>IEC: AADCF6524G · CIN: U70109TZ2019PTC031705</div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">02</span></div>
+</section>
+
+<!-- 3 FARM TO CONTAINER -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>Our work</b><i></i>From grove to container</div></div>
+  <div class="c">
+    <div class="kicker">Real photos from our operations</div>
+    <h2 class="h2" style="margin-bottom:4.5mm">From the grove <em>to your container</em></h2>
+    <div class="story">
+      <div class="step"><img src="img/grove.jpg" style="object-position:50% 70%"><span class="n">1</span><b>Harvest at partner groves</b><small>Fully mature nuts are harvested by maturity index and gathered in the grove for collection.</small></div>
+      <div class="step"><img src="img/packhouse.jpg"><span class="n">2</span><b>De-husking &amp; grading</b><small>At our packhouse nuts are semi- or fully de-husked and graded by size, weight and colour.</small></div>
+      <div class="step"><img src="img/scale.jpg" style="object-position:50% 60%"><span class="n">3</span><b>Weight-checked nut by nut</b><small>Grades are verified on the scale so every bag meets its gram-per-nut specification.</small></div>
+      <div class="step"><img src="img/bagging.jpg"><span class="n">4</span><b>Packed in branded PP bags</b><small>Nuts are counted into PP mesh or gunny bags — 25 to 100 nuts per bag depending on grade.</small></div>
+      <div class="step"><img src="img/copra-heap.jpg"><span class="n">5</span><b>Sun-drying copra</b><small>Kernel is sun-dried on clean yards to edible-grade copra with 65%+ oil content.</small></div>
+      <div class="step"><img src="img/truck-maersk.jpg"><span class="n">6</span><b>Container loading &amp; dispatch</b><small>Stuffed at our own packhouse dock and trucked to port with our own logistics management.</small></div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">03</span></div>
+</section>
+
+<!-- 4 INDEX -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>Product range</b><i></i>At a glance</div></div>
+  <div class="c">
+    <div class="kicker">25 coconut products · one supplier</div>
+    <h2 class="h2" style="margin-bottom:4mm">Our coconut <em>range</em></h2>
+    <div class="tw ix">
+    <table>
+      <thead><tr><th style="text-align:left">Product</th><th style="text-align:left">HSN</th><th style="text-align:left">Form / grade</th><th>Page</th></tr></thead>
+      <tbody>
+        <tr class="sec"><td colspan="4">01 · Whole coconuts</td></tr>
+        <tr><td>Semi-husked coconut</td><td>0801 19 10</td><td>Middle East &amp; EU grades, 13–22.5 kg bags</td><td>06</td></tr>
+        <tr><td>Fully husked (de-husked) coconut</td><td>—</td><td>A grade, ~550 g</td><td>07</td></tr>
+        <tr><td>Pooja / raw coconut</td><td>—</td><td>Semi-husked, ~400 g</td><td>07</td></tr>
+        <tr><td>GLOBALG.A.P. (IFA) coconut</td><td>—</td><td>Contract-farmed, A grade</td><td>07</td></tr>
+        <tr><td>Tender coconut</td><td>—</td><td>Naati (1.8 kg) &amp; Pollachi (550–650 g)</td><td>08</td></tr>
+        <tr><td>Sprouted coconut &amp; sprout powder</td><td>—</td><td>Fresh sprouts · spray-dried powder</td><td>08</td></tr>
+        <tr class="sec"><td colspan="4">02 · Copra &amp; oils</td></tr>
+        <tr><td>Edible copra (cup &amp; ball)</td><td>0801 19 20</td><td>Edible grade, oil &gt; 65%</td><td>10</td></tr>
+        <tr><td>Coconut oil</td><td>1513 19 00</td><td>Food grade, cold pressed</td><td>11</td></tr>
+        <tr><td>Virgin coconut oil (VCO)</td><td>—</td><td>Cold pressed, colourless</td><td>11</td></tr>
+        <tr><td>Coconut MCT oil</td><td>—</td><td>C8 / C10, 100% pure</td><td>12</td></tr>
+        <tr><td>Coconut testa oil</td><td>—</td><td>Virgin grade, cold pressed</td><td>12</td></tr>
+        <tr><td>Coconut oil cake</td><td>—</td><td>Expeller cake, oil &lt; 5%</td><td>13</td></tr>
+        <tr><td>VCO soap &amp; lip balm</td><td>—</td><td>Personal care</td><td>13</td></tr>
+        <tr class="sec"><td colspan="4">03 · Food ingredients</td></tr>
+        <tr><td>Coconut milk</td><td>0801 19 90</td><td>Fat 6%, no added preservative</td><td>15</td></tr>
+        <tr><td>Coconut milk powder</td><td>—</td><td>Spray dried, 12-month shelf life</td><td>15</td></tr>
+        <tr><td>Coconut powder (defatted)</td><td>—</td><td>Moisture 3%, 2-year shelf life</td><td>15</td></tr>
+        <tr><td>Desiccated coconut powder</td><td>1203 00 00</td><td>Fine, high fat</td><td>16</td></tr>
+        <tr><td>Coconut flakes</td><td>—</td><td>Unsweetened, white</td><td>16</td></tr>
+        <tr><td>Coconut flour</td><td>1106 30 90</td><td>Fine, low fat, gluten-free</td><td>16</td></tr>
+        <tr><td>Coconut sugar</td><td>2106 90 60</td><td>Granules, GI 35</td><td>17</td></tr>
+        <tr><td>Coconut butter</td><td>—</td><td>Whole-food spread</td><td>17</td></tr>
+        <tr><td>Tender coconut water &amp; water powder</td><td>—</td><td>Bottled · spray dried</td><td>17</td></tr>
+        <tr class="sec"><td colspan="4">04 · Coir &amp; growing media</td></tr>
+        <tr><td>Cocopeat blocks &amp; grow bags</td><td>5305 00 40</td><td>Washed low EC / unwashed high EC</td><td>18</td></tr>
+        <tr><td>Coir pith powder</td><td>—</td><td>Low EC, brown &amp; dark brown</td><td>19</td></tr>
+        <tr><td>Coconut husk chip blocks</td><td>—</td><td>4–6 mm, low EC</td><td>19</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="cap" style="margin-top:2mm">HSN codes as declared by FreshNet Farms; “—” = confirm with our export team per destination.</p>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">04</span></div>
+</section>
+
+<!-- 5 OPENER WHOLE -->
+<section class="page opener">
+  <img class="logo" src="img/logo-light.png" alt="">
+  <div class="mosaic"><img src="img/shc-hand.jpg"><img src="img/shc-pile.jpg"><img src="img/tender2.jpg"><img src="img/fh-pile.jpg"><img src="img/sprout.jpg"></div>
+  <div class="fade"></div>
+  <div class="no">01</div>
+  <div class="body">
+    <h1>Whole <em>Coconuts</em></h1>
+    <p>Mature Pollachi coconuts — semi-husked, fully husked and tender — graded by weight at our own packhouse and available 365 days a year.</p>
+  </div>
+  <div class="list"><span>Semi-husked</span><span>Fully husked</span><span>Pooja coconut</span><span>GLOBALG.A.P. coconut</span><span>Tender coconut</span><span>Sprouted coconut</span></div>
+</section>
+
+<!-- 6 SEMI HUSKED -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>01 · Whole coconuts</b><i></i>Flagship export</div></div>
+  <div class="tab t1"><span>Whole coconuts</span></div>
+  <div class="c">
+    <div class="row"><div><div class="kicker">Flagship export · Pollachi variety</div><h2 class="h2">Semi-Husked Coconut</h2></div><span class="hsn" style="margin-bottom:1.5mm">HSN 0801 19 10</span></div>
+    <p class="lead" style="margin:2mm 0 3mm">Mature brown coconuts de-husked with a tuft of husk left over the “eyes” — the most sensitive part of the nut. Protecting it extends shelf life, which is why semi-husked nuts are the preferred export format to the Middle East and Europe.</p>
+    <div style="display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;grid-template-rows:30mm 30mm;gap:2mm;margin-bottom:4mm">
+      <img src="img/shc-pile.jpg" style="grid-row:span 2;width:100%;height:100%;object-fit:cover;border-radius:12mm 3mm 3mm 3mm">
+      <img src="img/shc-hand.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+      <img src="img/shc-close.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+      <img src="img/shc-single.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+      <img src="img/shc-bag.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+      <img src="img/scale.jpg" style="width:100%;height:100%;object-fit:cover;object-position:50% 70%;border-radius:3mm">
+      <img src="img/sack.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+    </div>
+    <div class="subh">Export grade specifications</div>
+    <div class="tw">
+    <table>
+      <thead>
+        <tr class="g"><th style="background:var(--cocoa)"></th><th class="me" colspan="3">Middle East</th><th class="eu" colspan="2">European Union</th></tr>
+        <tr><th style="text-align:left">Bag type (kg)</th><th>13</th><th>15</th><th>17</th><th>22.5</th><th>22.5</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Coconut type</td><td>Semi-husked</td><td>Semi-husked</td><td>Semi-husked</td><td>De-husked</td><td>De-husked</td></tr>
+        <tr><td>Bags per container</td><td>2,200</td><td>1,900</td><td>1,680</td><td>1,080</td><td>1,080</td></tr>
+        <tr><td>Total volume (kg)</td><td>28,600</td><td>28,500</td><td>28,650</td><td>24,300</td><td>24,300</td></tr>
+        <tr><td>Nut size, min – max (g)</td><td>400 – 700</td><td>450 – 750</td><td>500 – 850</td><td>450 – 550</td><td>350 – 550</td></tr>
+        <tr><td>Average weight per nut (g)</td><td>550</td><td>600</td><td>675</td><td>550</td><td>450</td></tr>
+        <tr><td>Nuts per bag</td><td>25</td><td>25</td><td>25</td><td>40</td><td>50</td></tr>
+        <tr><td>Colour</td><td>Biscuit / brown</td><td>Brown</td><td>Brown</td><td>Brown</td><td>Brown</td></tr>
+        <tr><td>Type of bag</td><td>PP bag</td><td>PP bag</td><td>PP bag</td><td>PP bag</td><td>PP bag</td></tr>
+        <tr><td>Harvest maturity<small>days on tree (maturity index)</small></td><td>60</td><td>60</td><td>60</td><td>60</td><td>60</td></tr>
+        <tr><td>Curing after harvest</td><td>15–30 days</td><td>15–30 days</td><td>15–30 days</td><td>20 days</td><td>20 days</td></tr>
+        <tr><td>Shelf life after packing<small>max. stocking period</small></td><td>45–60 days</td><td>45–60 days</td><td>45–60 days</td><td>60 days</td><td>60 days</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="pack"><span class="chip"><svg><use href="#i-cal"/></svg>Available 365 days</span><span class="chip b"><svg><use href="#i-box"/></svg>Domestic: 100 nuts / PP bag, avg 500–550 g, A grade</span><span class="chip b"><svg><use href="#i-scale"/></svg>MOQ 10,000 kg</span></div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">06</span></div>
+</section>
+
+<!-- 7 FULLY HUSKED / POOJA / GLOBALGAP -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>01 · Whole coconuts</b><i></i>Husked &amp; certified</div></div>
+  <div class="tab t1"><span>Whole coconuts</span></div>
+  <div class="c" style="display:flex;flex-direction:column;justify-content:space-between;padding-bottom:3mm">
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/fh-pile.jpg"><div class="duo"><img src="img/fh-single.jpg" style="object-fit:contain;background:#fff;border:1px solid var(--line)"><img src="img/fh-wide.jpg"></div></div>
+      <div>
+        <div class="kicker">Mature · A grade</div>
+        <h3>Fully Husked Coconut</h3>
+        <p class="lead">Fully de-husked mature Pollachi coconuts with a clean, brown shell — for wholesale markets, food processors and retail packing.</p>
+        <dl class="specs">
+          <div><dt>Product type</dt><dd>Matured coconut</dd></div>
+          <div><dt>Variety / origin</dt><dd>Pollachi, Tamil Nadu</dd></div>
+          <div><dt>Average weight</dt><dd>550 g</dd></div>
+          <div><dt>Size</dt><dd>Medium</dd></div>
+          <div><dt>Grade</dt><dd>A grade</dd></div>
+          <div><dt>Husk type</dt><dd>Fully husked</dd></div>
+          <div><dt>Pack size</dt><dd>100 nuts / bag</dd></div>
+          <div><dt>Packaging</dt><dd>PP bag · 20 kg</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b"><svg><use href="#i-scale"/></svg>MOQ 10,000 kg</span><span class="chip"><svg><use href="#i-cal"/></svg>365 days</span></div>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb rev">
+      <div class="pics"><img class="big" src="img/raw-pile.jpg"><div class="duo"><img src="img/raw-pile2.jpg"><img src="img/shc-grade.jpg"></div></div>
+      <div>
+        <div class="kicker">Temple &amp; household</div>
+        <h3>Pooja / Raw Coconut</h3>
+        <p class="lead">Mature semi-husked nuts selected for pooja and religious use — clean tuft, sound shell, uniform size — packed by count in barti bags.</p>
+        <dl class="specs">
+          <div><dt>Product type</dt><dd>Mature</dd></div>
+          <div><dt>Form</dt><dd>Semi-husked</dd></div>
+          <div><dt>Average weight</dt><dd>400 g</dd></div>
+          <div><dt>Origin</dt><dd>Pollachi</dd></div>
+          <div><dt>Nuts per bag</dt><dd>100 · 120 · 150 · 175</dd></div>
+          <div><dt>Bag weight</dt><dd>50 kg (barti bag)</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/fh-pile2.jpg"></div>
+      <div>
+        <div class="kicker">Traceable · contract farming</div>
+        <h3>GLOBALG.A.P. (IFA) Coconut</h3>
+        <p class="lead">Coconuts grown by our contract-farming network under the GLOBALG.A.P. Integrated Farm Assurance (IFA) scheme — for buyers who need farm-level traceability.</p>
+        <dl class="specs">
+          <div><dt>Scheme</dt><dd>GLOBALG.A.P. IFA</dd></div>
+          <div><dt>Farmer model</dt><dd>Contract farming</dd></div>
+          <div><dt>Variety</dt><dd>Pollachi</dd></div>
+          <div><dt>Average weight</dt><dd>300 g</dd></div>
+          <div><dt>Grade</dt><dd>A grade · whole</dd></div>
+          <div><dt>Packaging</dt><dd>Gunny bag</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b">Food processing</span><span class="chip b">Retail</span><span class="chip b">Pooja</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">07</span></div>
+</section>
+
+<!-- 8 TENDER + SPROUTED -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>01 · Whole coconuts</b><i></i>Tender &amp; sprouted</div></div>
+  <div class="tab t1"><span>Whole coconuts</span></div>
+  <div class="c">
+    <div class="row"><div><div class="kicker">Harvested at ~7 months</div><h2 class="h2">Tender Coconut</h2></div></div>
+    <p class="lead" style="margin:2mm 0 3.5mm">Young green coconuts picked at around seven months, when they hold the most sweet water and soft, jelly-like meat. Supplied whole in two formats.</p>
+    <div style="display:grid;grid-template-columns:50mm 1fr 1fr;gap:5mm;margin-bottom:4mm">
+      <div class="pics"><img src="img/tender2.jpg" style="height:34mm"><img src="img/tender.jpg" style="height:34mm;object-fit:contain;background:#fff;border:1px solid var(--line)"></div>
+      <div>
+        <div class="subh">Naati tender coconut</div>
+        <dl class="specs one">
+          <div><dt>Variety</dt><dd>Naati</dd></div>
+          <div><dt>Average weight</dt><dd>1.8 kg</dd></div>
+          <div><dt>Water content</dt><dd>400 ml +</dd></div>
+          <div><dt>Size</dt><dd>Large</dd></div>
+          <div><dt>Grade</dt><dd>A grade · whole husk</dd></div>
+          <div><dt>Origin</dt><dd>Pollachi</dd></div>
+          <div><dt>Packaging</dt><dd>Loose</dd></div>
+          <div><dt>MOQ</dt><dd>80 pieces</dd></div>
+        </dl>
+      </div>
+      <div>
+        <div class="subh">Pollachi tender coconut</div>
+        <dl class="specs one">
+          <div><dt>Variety</dt><dd>Pollachi</dd></div>
+          <div><dt>Average weight</dt><dd>550–650 g</dd></div>
+          <div><dt>Copra recovery</dt><dd>180–190 g</dd></div>
+          <div><dt>Size</dt><dd>Medium</dd></div>
+          <div><dt>Grade</dt><dd>A grade · whole husk</dd></div>
+          <div><dt>Cultivation</dt><dd>Natural</dd></div>
+          <div><dt>Origin</dt><dd>Tamil Nadu</dd></div>
+          <div><dt>MOQ</dt><dd>100 pieces</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="sep" style="margin:3mm 0 4mm"></div>
+    <div class="row"><div><div class="kicker">Germinated coconut</div><h2 class="h2">Sprouted Coconut</h2></div></div>
+    <p class="lead" style="margin:2mm 0 3.5mm">When a mature nut germinates, the water inside turns into a soft, spongy edible “coconut apple”. We supply fresh sprouted nuts and a spray-dried sprout powder.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1.2fr;gap:2mm;grid-template-rows:44mm;margin-bottom:3.5mm">
+      <img src="img/sprout.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:10mm 3mm 3mm 3mm">
+      <img src="img/sprout2.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+      <img src="img/sprout-balls.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+      <img src="img/sprout-cut.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+    </div>
+    <div class="subh">Coconut sprout powder</div>
+    <dl class="specs">
+      <div><dt>Processing</dt><dd>Spray dried</dd></div>
+      <div><dt>Coconut content</dt><dd>70–80%</dd></div>
+      <div><dt>Sweetener</dt><dd>No added sugar</dd></div>
+      <div><dt>Sodium</dt><dd>Low sodium</dd></div>
+      <div><dt>Pack size</dt><dd>100 g</dd></div>
+      <div><dt>Applications</dt><dd>Bakery · beverages · nutraceuticals</dd></div>
+    </dl>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">08</span></div>
+</section>
+
+<!-- 9 OPENER COPRA & OILS -->
+<section class="page opener">
+  <img class="logo" src="img/logo-light.png" alt="">
+  <div class="mosaic"><img src="img/copra-heap.jpg"><img src="img/copra-cups.jpg"><img src="img/testa.jpg" style="object-position:50% 35%"><img src="img/copra-drying.jpg"><img src="img/oilcake.jpg"></div>
+  <div class="fade"></div>
+  <div class="no">02</div>
+  <div class="body">
+    <h1>Copra <em>&amp; Oils</em></h1>
+    <p>Sun-dried edible copra and the oils pressed from it — refined-free coconut oil, cold-pressed virgin oil, MCT and testa oil — plus expeller oil cake.</p>
+  </div>
+  <div class="list"><span>Edible copra</span><span>Coconut oil</span><span>Virgin coconut oil</span><span>MCT oil</span><span>Testa oil</span><span>Oil cake</span><span>VCO soap &amp; lip balm</span></div>
+</section>
+
+<!-- 10 COPRA -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>02 · Copra &amp; oils</b><i></i>Edible copra</div></div>
+  <div class="tab t2"><span>Copra &amp; oils</span></div>
+  <div class="c">
+    <div class="row"><div><div class="kicker">Sun dried · edible grade</div><h2 class="h2">Coconut Copra</h2></div><span class="hsn" style="margin-bottom:1.5mm">HSN 0801 19 20</span></div>
+    <p class="lead" style="margin:2mm 0 3.5mm">Copra is the dried kernel of the mature coconut, prized for its high oil content. Ours is sun-dried on clean drying yards and supplied as cup (half-shell) copra and whole ball copra — for direct eating, cooking, bakery, pooja and oil milling.</p>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;grid-template-rows:34mm 34mm;gap:2mm;margin-bottom:4.5mm">
+      <img src="img/copra-drying.jpg" style="grid-row:span 2;width:100%;height:100%;object-fit:cover;border-radius:12mm 3mm 3mm 3mm">
+      <img src="img/copra-cups.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+      <img src="img/copra-halves.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+      <img src="img/copra-bag.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+      <img src="img/copra-cup.jpg" style="width:100%;height:100%;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:3mm">
+    </div>
+    <div class="tiles" style="margin-bottom:4mm">
+      <div class="tile hl"><div class="v">&gt; 65%</div><div class="l">Oil content</div></div>
+      <div class="tile"><div class="v">140–200 g</div><div class="l">Ball size (medium)</div></div>
+      <div class="tile"><div class="v">6 months</div><div class="l">Shelf life</div></div>
+      <div class="tile au"><div class="v">365 days</div><div class="l">Availability</div></div>
+    </div>
+    <div class="subh">Grades &amp; packing</div>
+    <div class="tw left">
+    <table>
+      <thead><tr><th style="text-align:left">Specification</th><th style="text-align:left">Edible copra (white)</th><th style="text-align:left">Brown edible ball copra</th></tr></thead>
+      <tbody>
+        <tr><td>Form</td><td>Ball copra · copra cups</td><td>Ball copra</td></tr>
+        <tr><td>Grade</td><td>Edible grade</td><td>Edible grade</td></tr>
+        <tr><td>Size</td><td>Medium (140–200 g)</td><td>Medium (140–200 g)</td></tr>
+        <tr><td>Oil content</td><td>Above 65%</td><td>Above 65%</td></tr>
+        <tr><td>Colour</td><td>White kernel</td><td>Brown</td></tr>
+        <tr><td>Drying method</td><td>Sun dried</td><td>Sun dried</td></tr>
+        <tr><td>Uses</td><td>Food, bakery, oil milling</td><td>Kitchen, edible, pooja &amp; bakery</td></tr>
+        <tr><td>Shelf life</td><td>6 months</td><td>6 months</td></tr>
+        <tr><td>Packing</td><td>1 · 5 · 20 · 25 · 50 kg — PP &amp; gunny bags</td><td>25 kg PP bag · loose</td></tr>
+        <tr><td>MOQ</td><td>10,000 kg</td><td>100 kg</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">10</span></div>
+</section>
+
+<!-- 11 COCONUT OIL + VCO -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>02 · Copra &amp; oils</b><i></i>Coconut oils</div></div>
+  <div class="tab t2"><span>Copra &amp; oils</span></div>
+  <div class="c" style="display:flex;flex-direction:column;justify-content:space-around;padding-bottom:4mm">
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/wm-vco.jpg" style="height:72mm"></div>
+      <div>
+        <div class="kicker">Edible oil · food grade</div>
+        <div class="row" style="justify-content:flex-start;gap:3mm"><h3>Coconut Oil</h3><span class="hsn" style="margin-bottom:2mm">HSN 1513 19 00</span></div>
+        <p class="lead">Pressed from sun-dried coconut kernel. A white solid fat below about 25 °C and a clear, thin liquid in warmer climates; unrefined grades keep a distinct coconut aroma.</p>
+        <dl class="specs">
+          <div><dt>Grade</dt><dd>Food grade</dd></div>
+          <div><dt>Extraction</dt><dd>Cold pressed</dd></div>
+          <div><dt>Raw material</dt><dd>Sun-dried coconut</dd></div>
+          <div><dt>Origin</dt><dd>Tamil Nadu</dd></div>
+          <div><dt>Applications</dt><dd>Cooking · dietary use</dd></div>
+          <div><dt>Availability</dt><dd>365 days</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b"><svg><use href="#i-box"/></svg>500 ml plastic bottle</span><span class="chip b"><svg><use href="#i-box"/></svg>Bulk 500 ml – 15 litre</span></div>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb rev">
+      <div class="pics"><img class="big" src="img/copra-halves.jpg" style="height:72mm"><div class="cap">Fresh kernel — the raw material for our VCO</div></div>
+      <div>
+        <div class="kicker">Cold pressed · no heat, no chemicals</div>
+        <h3>Virgin Coconut Oil (VCO)</h3>
+        <p class="lead">Extracted from fresh coconut milk by pressure alone — no heat, no bleaching, no deodorising — so it keeps its natural aroma, antioxidants and medium-chain fats, especially lauric acid. For cooking, skin and hair care.</p>
+        <dl class="specs">
+          <div><dt>Grade</dt><dd>Virgin grade</dd></div>
+          <div><dt>Processing</dt><dd>Cold pressed</dd></div>
+          <div><dt>Plant part</dt><dd>Coconut kernel</dd></div>
+          <div><dt>Appearance</dt><dd>Colourless</dd></div>
+          <div><dt>Applications</dt><dd>Cooking · cosmetics</dd></div>
+          <div><dt>Availability</dt><dd>365 days</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b"><svg><use href="#i-box"/></svg>1 litre plastic bottle</span><span class="chip b">Bulk on request</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">11</span></div>
+</section>
+
+<!-- 12 MCT + TESTA -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>02 · Copra &amp; oils</b><i></i>Speciality oils</div></div>
+  <div class="tab t2"><span>Copra &amp; oils</span></div>
+  <div class="c" style="display:flex;flex-direction:column;justify-content:space-around;padding-bottom:4mm">
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/copra-cup.jpg" style="height:72mm;object-fit:contain;background:#fff;border:1px solid var(--line)"><div class="cap">Coconut kernel, the source of MCT oil</div></div>
+      <div>
+        <div class="kicker">Functional nutrition</div>
+        <h3>Coconut MCT Oil</h3>
+        <p class="lead">Medium-chain triglyceride oil fractionated from coconut oil — chiefly caprylic (C8) and capric (C10) acids, which the body metabolises differently from long-chain fats. Used in nutraceuticals, sports nutrition, coffee and dressings.</p>
+        <dl class="specs">
+          <div><dt>Source</dt><dd>Coconut</dd></div>
+          <div><dt>Main fatty acids</dt><dd>C8 · C10</dd></div>
+          <div><dt>Grade</dt><dd>Pharma grade</dd></div>
+          <div><dt>Purity</dt><dd>100%</dd></div>
+          <div><dt>Form</dt><dd>Liquid</dd></div>
+          <div><dt>Applications</dt><dd>Nutraceutical · food</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b"><svg><use href="#i-box"/></svg>1 litre</span><span class="chip b"><svg><use href="#i-box"/></svg>HDPE drum</span></div>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb rev">
+      <div class="pics"><img class="big" src="img/testa.jpg" style="height:72mm;object-position:50% 40%"></div>
+      <div>
+        <div class="kicker">From the brown skin of the kernel</div>
+        <h3>Coconut Testa Oil</h3>
+        <p class="lead">Pressed from the testa — the thin brown skin pared off the kernel during processing. A light oil with a strong coconut aroma, naturally rich in vitamin E and phenolic antioxidants; used in cooking, hair and skin care.</p>
+        <dl class="specs">
+          <div><dt>Grade</dt><dd>Virgin grade</dd></div>
+          <div><dt>Processing</dt><dd>Cold pressed</dd></div>
+          <div><dt>Colour</dt><dd>Water white</dd></div>
+          <div><dt>Aroma</dt><dd>Strong coconut</dd></div>
+          <div><dt>Applications</dt><dd>Cooking · hair · skin</dd></div>
+          <div><dt>Availability</dt><dd>365 days</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b"><svg><use href="#i-box"/></svg>1 litre bottle</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">12</span></div>
+</section>
+
+<!-- 13 OIL CAKE + PERSONAL CARE -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>02 · Copra &amp; oils</b><i></i>By-products &amp; care</div></div>
+  <div class="tab t2"><span>Copra &amp; oils</span></div>
+  <div class="c">
+    <div class="kicker">Expeller by-product</div>
+    <h2 class="h2">Coconut Oil Cake</h2>
+    <p class="lead" style="margin:2mm 0 3.5mm">The cake left after mechanical (expeller) pressing of copra. Used as cattle feed and organic fertiliser, or for further oil recovery by solvent extraction.</p>
+    <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:2mm;grid-template-rows:52mm;margin-bottom:4mm">
+      <img src="img/oilcake.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:12mm 3mm 3mm 3mm">
+      <img src="img/oilcake2.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+      <img src="img/oilcake3.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+    </div>
+    <div class="tiles" style="margin-bottom:3mm">
+      <div class="tile hl"><div class="v">&lt; 5%</div><div class="l">Oil content</div></div>
+      <div class="tile"><div class="v">&lt; 8%</div><div class="l">Moisture</div></div>
+      <div class="tile"><div class="v">Expeller</div><div class="l">Extraction type</div></div>
+      <div class="tile"><div class="v">6 months</div><div class="l">Shelf life</div></div>
+    </div>
+    <dl class="specs" style="margin-bottom:2mm">
+      <div><dt>Material</dt><dd>100% coconut</dd></div>
+      <div><dt>Colour / form</dt><dd>Brown cake</dd></div>
+      <div><dt>Applications</dt><dd>Cattle feed · organic fertiliser</dd></div>
+      <div><dt>Country of origin</dt><dd>India</dd></div>
+    </dl>
+    <div class="pack"><span class="chip b"><svg><use href="#i-box"/></svg>25 kg bag · loose</span><span class="chip b"><svg><use href="#i-scale"/></svg>MOQ 100 kg</span></div>
+
+    <div class="sep" style="margin:6mm 0 5mm"></div>
+    <div class="kicker">Made with our virgin coconut oil</div>
+    <h2 class="h2" style="margin-bottom:3mm">Personal Care</h2>
+    <div style="display:grid;grid-template-columns:62mm 1fr;gap:6mm;align-items:start">
+      <img src="img/lipbalm.jpg" style="width:100%;height:44mm;object-fit:cover;border-radius:3mm 12mm 3mm 3mm">
+      <div>
+        <div class="subh">VCO soap</div>
+        <dl class="specs" style="margin-bottom:3mm">
+          <div><dt>Base</dt><dd>Coconut oil</dd></div>
+          <div><dt>Form</dt><dd>Rectangular bar</dd></div>
+          <div><dt>Skin type</dt><dd>All skin types</dd></div>
+          <div><dt>Fragrance</dt><dd>Coconut</dd></div>
+          <div><dt>Packing</dt><dd>Boxed · 100 g</dd></div>
+          <div><dt>Use</dt><dd>Body &amp; bath</dd></div>
+        </dl>
+        <div class="subh">VCO lip balm</div>
+        <p style="font-size:8pt">A nourishing balm based on our cold-pressed virgin coconut oil, in a compact screw-top jar.</p>
+      </div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">13</span></div>
+</section>
+
+<!-- 14 OPENER FOOD -->
+<section class="page opener">
+  <img class="logo" src="img/logo-light.png" alt="">
+  <div class="mosaic"><img src="img/wm-milk.jpg"><img src="img/desiccated-own.jpg"><img src="img/wm-sugar.jpg"><img src="img/wm-flour.jpg"><img src="img/wm-water.jpg"></div>
+  <div class="fade"></div>
+  <div class="no">03</div>
+  <div class="body">
+    <h1>Food <em>Ingredients</em></h1>
+    <p>Milks, powders, flours, flakes and natural sweetener — for bakeries, beverage makers, food processors and HORECA.</p>
+  </div>
+  <div class="list"><span>Coconut milk</span><span>Milk powder</span><span>Coconut powder</span><span>Desiccated</span><span>Flakes</span><span>Flour</span><span>Sugar</span><span>Butter</span><span>Coconut water</span><span>Water powder</span></div>
+</section>
+
+<!-- 15 MILK FAMILY -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>03 · Food ingredients</b><i></i>Milk &amp; powders</div></div>
+  <div class="tab t3"><span>Food ingredients</span></div>
+  <div class="c" style="display:flex;flex-direction:column;justify-content:space-between;padding-bottom:3mm">
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/wm-milk.jpg"></div>
+      <div>
+        <div class="kicker">Rich &amp; creamy</div>
+        <div class="row" style="justify-content:flex-start;gap:3mm"><h3>Coconut Milk</h3><span class="hsn" style="margin-bottom:2mm">HSN 0801 19 90</span></div>
+        <p class="lead">An opaque, milky-white liquid pressed from the grated flesh of mature coconuts — a dairy alternative for beverages, ice cream, cooking and bakery.</p>
+        <dl class="specs">
+          <div><dt>Fat content</dt><dd>6.0%</dd></div>
+          <div><dt>Preservative</dt><dd>None added</dd></div>
+          <div><dt>Packaging</dt><dd>Bottle</dd></div>
+          <div><dt>Pack sizes</dt><dd>180 ml · 500 ml</dd></div>
+        </dl>
+        <div class="pack"><span class="chip"><svg><use href="#i-cal"/></svg>365 days</span><span class="chip b"><svg><use href="#i-box"/></svg>Range 100 ml – 1 litre</span></div>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb rev">
+      <div class="pics"><img class="big" src="img/wm-milkpowder.jpg"></div>
+      <div>
+        <div class="kicker">Instant · vegan · shelf-stable</div>
+        <h3>Coconut Milk Powder</h3>
+        <p class="lead">Spray-dried coconut milk that reconstitutes instantly with water. A convenient alternative to canned milk and a non-dairy creamer for coffee and lattes.</p>
+        <dl class="specs">
+          <div><dt>Form</dt><dd>Instant powder</dd></div>
+          <div><dt>Fat type</dt><dd>Regular fat</dd></div>
+          <div><dt>Flavour</dt><dd>Plain</dd></div>
+          <div><dt>Vegan</dt><dd>Yes</dd></div>
+          <div><dt>Shelf life</dt><dd>12 months</dd></div>
+          <div><dt>Applications</dt><dd>Beverages · cooking · bakery</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b"><svg><use href="#i-box"/></svg>500 g pouch</span></div>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/copra-cups2.jpg" style="height:40mm"></div>
+      <div>
+        <div class="kicker">Defatted · long shelf life</div>
+        <h3>Coconut Powder (Defatted)</h3>
+        <dl class="specs" style="margin-top:2mm">
+          <div><dt>Oil extraction</dt><dd>Defatted</dd></div>
+          <div><dt>Fat content</dt><dd>Medium fat</dd></div>
+          <div><dt>Moisture</dt><dd>3%</dd></div>
+          <div><dt>Colour</dt><dd>White</dd></div>
+          <div><dt>Shelf life</dt><dd>2 years</dd></div>
+          <div><dt>Uses</dt><dd>Bakery · catering · processing</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b"><svg><use href="#i-box"/></svg>200 g · loose bulk</span><span class="chip b"><svg><use href="#i-scale"/></svg>MOQ 50 kg</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">15</span></div>
+</section>
+
+<!-- 16 DESICCATED FLAKES FLOUR -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>03 · Food ingredients</b><i></i>Desiccated, flakes &amp; flour</div></div>
+  <div class="tab t3"><span>Food ingredients</span></div>
+  <div class="c" style="display:flex;flex-direction:column;justify-content:space-between;padding-bottom:3mm">
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/desiccated-own.jpg"></div>
+      <div>
+        <div class="kicker">Bakery &amp; confectionery</div>
+        <div class="row" style="justify-content:flex-start;gap:3mm"><h3>Desiccated Coconut Powder</h3></div>
+        <span class="hsn">HSN 1203 00 00</span>
+        <p class="lead">Dried, finely shredded coconut kernel — a cholesterol-free, fibre-rich ingredient for confectionery, puddings, cereals, toppings and baked goods, and a direct substitute for fresh grated coconut.</p>
+        <dl class="specs">
+          <div><dt>Form</dt><dd>Fine desiccated</dd></div>
+          <div><dt>Fat content</dt><dd>High fat</dd></div>
+          <div><dt>Rich in</dt><dd>Manganese · copper</dd></div>
+          <div><dt>Uses</dt><dd>Catering · bakery</dd></div>
+        </dl>
+        <div class="pack"><span class="chip"><svg><use href="#i-cal"/></svg>365 days</span><span class="chip b"><svg><use href="#i-box"/></svg>100 g &amp; 1 kg pouches</span><span class="chip b">Bulk bags on request</span></div>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb rev">
+      <div class="pics"><img class="big" src="img/wm-flakes.jpg"></div>
+      <div>
+        <div class="kicker">Unsweetened</div>
+        <h3>Coconut Flakes</h3>
+        <p class="lead">Wide, white flakes of dried coconut — a source of fat, fibre, iron and protein, plus calcium, copper, magnesium, potassium and zinc.</p>
+        <dl class="specs">
+          <div><dt>Type</dt><dd>Desiccated flakes</dd></div>
+          <div><dt>Sweetness</dt><dd>Unsweetened</dd></div>
+          <div><dt>Colour</dt><dd>White</dd></div>
+          <div><dt>Shelf life</dt><dd>12 months</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b"><svg><use href="#i-box"/></svg>1 kg PP bag</span></div>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/wm-flour.jpg"></div>
+      <div>
+        <div class="kicker">Gluten-free · grain-free</div>
+        <div class="row" style="justify-content:flex-start;gap:3mm"><h3>Coconut Flour</h3><span class="hsn" style="margin-bottom:2mm">HSN 1106 30 90</span></div>
+        <p class="lead">Dried coconut meat milled to a fine, mild-tasting flour. Naturally gluten-free — suited to coeliac, wheat-allergy and grain-free diets in breads, pancakes, cookies and muffins.</p>
+        <dl class="specs">
+          <div><dt>Form</dt><dd>Fine flour</dd></div>
+          <div><dt>Fat content</dt><dd>Low fat</dd></div>
+          <div><dt>Gluten</dt><dd>Gluten-free</dd></div>
+          <div><dt>Origin</dt><dd>Made in India</dd></div>
+        </dl>
+        <div class="pack"><span class="chip"><svg><use href="#i-cal"/></svg>365 days</span><span class="chip b"><svg><use href="#i-box"/></svg>500 g stand-up pouch</span><span class="chip b">Bulk bags on request</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">16</span></div>
+</section>
+
+<!-- 17 SUGAR BUTTER WATER -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>03 · Food ingredients</b><i></i>Sugar, butter &amp; water</div></div>
+  <div class="tab t3"><span>Food ingredients</span></div>
+  <div class="c" style="display:flex;flex-direction:column;justify-content:space-between;padding-bottom:3mm">
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/wm-sugar.jpg"></div>
+      <div>
+        <div class="kicker">Natural sweetener · low GI</div>
+        <div class="row" style="justify-content:flex-start;gap:3mm"><h3>Coconut Sugar</h3><span class="hsn" style="margin-bottom:2mm">HSN 2106 90 60</span></div>
+        <p class="lead">Palm sugar made from the sap of the coconut flower-bud stem. Unrefined and chemical-free; golden, honey-like, low in fructose and naturally containing iron, calcium and potassium.</p>
+        <dl class="specs">
+          <div><dt>Form</dt><dd>Granules</dd></div>
+          <div><dt>Glycemic index</dt><dd>35 (low GI)</dd></div>
+          <div><dt>Colour</dt><dd>Golden brown</dd></div>
+          <div><dt>Processing</dt><dd>Natural, unrefined</dd></div>
+        </dl>
+        <div class="pack"><span class="chip"><svg><use href="#i-cal"/></svg>365 days</span><span class="chip b"><svg><use href="#i-box"/></svg>100 · 200 · 250 · 400 · 500 · 750 g · 1 kg</span></div>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb rev">
+      <div class="pics"><img class="big" src="img/copra-cups.jpg" style="height:40mm"></div>
+      <div>
+        <div class="kicker">Whole-food spread</div>
+        <h3>Coconut Butter</h3>
+        <p class="lead">A semi-solid, creamy paste made by pureeing the dried flesh of mature coconuts. Contains both the oil and the fibre — slightly sweet, nutrient-rich and free of stabilisers; for desserts, cooking and bakery.</p>
+        <div class="pack"><span class="chip b">No stabiliser</span><span class="chip b">Unflavoured</span><span class="chip b">Pack size on request</span></div>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/wm-water.jpg"></div>
+      <div>
+        <div class="kicker">From Coimbatore &amp; Pollachi orchards</div>
+        <h3>Tender Coconut Water &amp; Powder</h3>
+        <dl class="specs" style="margin-top:2mm">
+          <div><dt>Bottled water</dt><dd>100% natural</dd></div>
+          <div><dt>Pulp</dt><dd>Without pulp</dd></div>
+          <div><dt>Net volume</dt><dd>200 ml bottle</dd></div>
+          <div><dt>Also packed</dt><dd>500 ml</dd></div>
+          <div><dt>Water powder</dt><dd>Spray dried</dd></div>
+          <div><dt>Coconut content</dt><dd>70–80%</dd></div>
+          <div><dt>Sodium</dt><dd>Low</dd></div>
+          <div><dt>Powder pack</dt><dd>100 g packet</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b">Electrolytes · minerals</span><span class="chip b">Nutraceuticals · bakery · beverages · HORECA</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">17</span></div>
+</section>
+
+<!-- 18 COCOPEAT -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>04 · Coir &amp; growing media</b><i></i>Cocopeat</div></div>
+  <div class="tab t4"><span>Coir media</span></div>
+  <div class="c">
+    <div class="row"><div><div class="kicker">Soil-less growing media</div><h2 class="h2">Cocopeat Blocks &amp; Grow Bags</h2></div><span class="hsn" style="margin-bottom:1.5mm">HSN 5305 00 40</span></div>
+    <p class="lead" style="margin:2mm 0 3mm">100% natural, biodegradable coir pith compressed into blocks — a multipurpose medium for nurseries, horticulture and floriculture that raises yields while saving water and fertiliser. 5 kg blocks in two grades: <b>washed low EC</b> and <b>unwashed high EC</b>.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2mm;grid-template-rows:40mm;margin-bottom:3.5mm">
+      <img src="img/peat-block.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:12mm 3mm 3mm 3mm">
+      <img src="img/peat-bricks.jpg" style="width:100%;height:100%;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:3mm">
+      <img src="img/pith.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:3mm">
+    </div>
+    <div class="subh">Block specification · 5 kg (Iran requirement)</div>
+    <div class="tiles" style="margin-bottom:3.5mm">
+      <div class="tile hl"><div class="v">1 : 5</div><div class="l">Compression ratio</div></div>
+      <div class="tile"><div class="v">&lt; 15%</div><div class="l">Moisture</div></div>
+      <div class="tile"><div class="v">70–75 L</div><div class="l">Breakout volume</div></div>
+      <div class="tile"><div class="v">&lt; 0.5 mS/cm</div><div class="l">EC (1:1.5)</div></div>
+      <div class="tile"><div class="v">5 kg ± 100 g</div><div class="l">Weight</div></div>
+      <div class="tile hl"><div class="v">5.5 – 6.5</div><div class="l">pH</div></div>
+      <div class="tile"><div class="v">30×30×10 cm</div><div class="l">Size</div></div>
+      <div class="tile"><div class="v">6–8 mm</div><div class="l">Screen · ¼″ mesh</div></div>
+      <div class="tile"><div class="v">&lt; 10%</div><div class="l">Fibre</div></div>
+      <div class="tile"><div class="v">&lt; 3%</div><div class="l">Impurity</div></div>
+      <div class="tile"><div class="v">None</div><div class="l">Foreign material</div></div>
+      <div class="tile au"><div class="v">Jan – Jun</div><div class="l">Season</div></div>
+    </div>
+    <div class="subh">Grow bag packing</div>
+    <div class="tw">
+    <table>
+      <thead><tr><th>#</th><th>Size (cm)</th><th>Weight (kg)</th><th>Mix</th><th>Pith %</th><th>Chips %</th><th>Pieces / pallet</th><th>Per 40 ft container</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>100×15×12</td><td>1.9</td><td>100</td><td>100</td><td>—</td><td>600</td><td>12,000</td></tr>
+        <tr><td>2</td><td>100×15×12</td><td>2.0</td><td>70/30</td><td>70</td><td>30</td><td>600</td><td>12,000</td></tr>
+        <tr><td>3</td><td>100×15×15</td><td>2.4</td><td>100</td><td>100</td><td>—</td><td>500</td><td>10,000</td></tr>
+        <tr><td>4</td><td>100×15×15</td><td>2.5</td><td>70/30</td><td>70</td><td>30</td><td>500</td><td>10,000</td></tr>
+        <tr><td>5</td><td>100×18×14</td><td>2.7</td><td>100</td><td>100</td><td>—</td><td>450</td><td>9,000</td></tr>
+        <tr><td>6</td><td>100×18×14</td><td>2.8</td><td>70/30</td><td>70</td><td>30</td><td>450</td><td>9,000</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="pack"><span class="chip"><svg><use href="#i-cal"/></svg>3rd week of January – 1st week of June</span><span class="chip b"><svg><use href="#i-scale"/></svg>Blocks: MOQ 100 pieces</span><span class="chip b">Port: Tuticorin</span></div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">18</span></div>
+</section>
+
+<!-- 19 COIR PITH + CHIPS -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>04 · Coir &amp; growing media</b><i></i>Coir pith &amp; husk chips</div></div>
+  <div class="tab t4"><span>Coir media</span></div>
+  <div class="c" style="display:flex;flex-direction:column;justify-content:space-around;padding-bottom:4mm">
+    <div class="pb">
+      <div class="pics"><img class="big" src="img/pith-bag.jpg" style="height:62mm"><div class="duo"><img src="img/pith-dark.jpg"><img src="img/pith.jpg"></div></div>
+      <div>
+        <div class="kicker">Water-retentive growing media</div>
+        <h3>Coir Pith Powder</h3>
+        <p class="lead">De-fibred coconut husk pith with very high water retention — 600–800% of its dry weight, up to 1,100% — high potassium and low bulk density (0.18 g/cc). Cuts water and fertiliser use in floriculture, potting mixes and horticulture.</p>
+        <div class="tw left" style="margin-top:1mm">
+        <table>
+          <thead><tr><th style="text-align:left">Specification</th><th style="text-align:left">Brown</th><th style="text-align:left">Dark brown</th></tr></thead>
+          <tbody>
+            <tr><td>EC</td><td>Low EC</td><td>Low EC</td></tr>
+            <tr><td>Moisture</td><td>Below 15%</td><td>Below 15%</td></tr>
+            <tr><td>Sieving</td><td>Unscreened</td><td>Unscreened</td></tr>
+            <tr><td>Use</td><td>Floriculture, potting mix</td><td>Floriculture, horticulture</td></tr>
+            <tr><td>Packing</td><td>25 kg bag · loose</td><td>25 kg bag · loose</td></tr>
+            <tr><td>MOQ</td><td>100 kg</td><td>100 kg</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+    <div class="sep" style="margin:0"></div>
+    <div class="pb rev">
+      <div class="pics"><img class="big" src="img/chips.jpg" style="height:62mm"><div class="duo"><img src="img/chips2.jpg"><img src="img/peat-block.jpg"></div></div>
+      <div>
+        <div class="kicker">Aeration for orchids &amp; potting mixes</div>
+        <h3>Coconut Husk Chip Blocks</h3>
+        <p class="lead">Coconut husk cut into small chips and compressed into blocks. Added to potting soil or mixed with cocopeat to keep the ideal air-to-moisture balance around plant roots.</p>
+        <dl class="specs">
+          <div><dt>Material</dt><dd>100% coco husk</dd></div>
+          <div><dt>Chip size</dt><dd>4–6 mm</dd></div>
+          <div><dt>EC level</dt><dd>Low EC</dd></div>
+          <div><dt>Moisture</dt><dd>Max 15%</dd></div>
+          <div><dt>Block weight</dt><dd>4 kg</dd></div>
+          <div><dt>Grade</dt><dd>A</dd></div>
+          <div><dt>Shelf life</dt><dd>5 years</dd></div>
+          <div><dt>Application</dt><dd>Orchids · agriculture</dd></div>
+        </dl>
+        <div class="pack"><span class="chip b"><svg><use href="#i-scale"/></svg>MOQ 100 kg</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">19</span></div>
+</section>
+
+<!-- 20 PACKING MASTER TABLE -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>Ordering</b><i></i>Packing, MOQ &amp; shelf life</div></div>
+  <div class="c">
+    <div class="kicker">Everything in one table</div>
+    <h2 class="h2" style="margin-bottom:4mm">Packing &amp; <em>ordering guide</em></h2>
+    <div class="tw left">
+    <table style="font-size:7pt">
+      <thead><tr><th style="text-align:left">Product</th><th style="text-align:left">Packing options</th><th style="text-align:left">MOQ</th><th style="text-align:left">Shelf life</th><th style="text-align:left">Availability</th></tr></thead>
+      <tbody>
+        <tr><td>Semi-husked coconut</td><td>PP bags 13 / 15 / 17 / 22.5 kg (25–50 nuts); domestic 100 nuts / bag</td><td>10,000 kg</td><td>45–60 days</td><td>365 days</td></tr>
+        <tr><td>Fully husked coconut</td><td>PP bag, 100 nuts · 20 kg</td><td>10,000 kg</td><td>—</td><td>365 days</td></tr>
+        <tr><td>Pooja / raw coconut</td><td>Barti bag 50 kg · 100–175 nuts</td><td>On request</td><td>—</td><td>365 days</td></tr>
+        <tr><td>GLOBALG.A.P. coconut</td><td>Gunny bag</td><td>On request</td><td>—</td><td>On request</td></tr>
+        <tr><td>Tender coconut</td><td>Loose, whole husk</td><td>80–100 pcs</td><td>—</td><td>365 days</td></tr>
+        <tr><td>Edible copra</td><td>1 · 5 · 20 · 25 · 50 kg PP / gunny bags</td><td>100–10,000 kg</td><td>6 months</td><td>365 days</td></tr>
+        <tr><td>Coconut oil</td><td>500 ml bottle · bulk to 15 L</td><td>On request</td><td>—</td><td>365 days</td></tr>
+        <tr><td>Virgin coconut oil</td><td>1 L plastic bottle · bulk</td><td>On request</td><td>—</td><td>365 days</td></tr>
+        <tr><td>MCT oil</td><td>1 L · HDPE drum</td><td>On request</td><td>—</td><td>On request</td></tr>
+        <tr><td>Testa oil</td><td>1 L bottle</td><td>On request</td><td>—</td><td>365 days</td></tr>
+        <tr><td>Coconut oil cake</td><td>25 kg bag · loose</td><td>100 kg</td><td>6 months</td><td>365 days</td></tr>
+        <tr><td>Coconut milk</td><td>180 ml · 500 ml bottles (100 ml – 1 L)</td><td>On request</td><td>—</td><td>365 days</td></tr>
+        <tr><td>Coconut milk powder</td><td>500 g pouch</td><td>On request</td><td>12 months</td><td>On request</td></tr>
+        <tr><td>Coconut powder (defatted)</td><td>200 g · loose bulk</td><td>50 kg</td><td>2 years</td><td>On request</td></tr>
+        <tr><td>Desiccated coconut</td><td>100 g · 1 kg pouch · bulk bags</td><td>On request</td><td>—</td><td>365 days</td></tr>
+        <tr><td>Coconut flakes</td><td>1 kg PP bag</td><td>On request</td><td>12 months</td><td>On request</td></tr>
+        <tr><td>Coconut flour</td><td>500 g stand-up pouch · bulk bags</td><td>On request</td><td>—</td><td>365 days</td></tr>
+        <tr><td>Coconut sugar</td><td>100 g – 1 kg PP bags / pouches</td><td>On request</td><td>—</td><td>365 days</td></tr>
+        <tr><td>Coconut water / powder</td><td>200 ml · 500 ml bottle / 100 g packet</td><td>On request</td><td>—</td><td>On request</td></tr>
+        <tr><td>Cocopeat blocks &amp; grow bags</td><td>5 kg blocks · grow bags (see p. 18)</td><td>100 blocks</td><td>—</td><td>Jan – Jun</td></tr>
+        <tr><td>Coir pith powder</td><td>25 kg bag · loose</td><td>100 kg</td><td>—</td><td>365 days</td></tr>
+        <tr><td>Husk chip blocks</td><td>4 kg block</td><td>100 kg</td><td>5 years</td><td>365 days</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="note"><b>Private label &amp; custom packing</b>Bag type, nut count, pouch size and labelling can be tailored to your market. Prices are quoted per order (FOB / CIF) — contact our export team.</div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">20</span></div>
+</section>
+
+<!-- 21 LOGISTICS -->
+<section class="page">
+  <div class="top"><img src="img/logo.png" alt=""><div class="crumb"><b>Our work</b><i></i>Packhouse &amp; logistics</div></div>
+  <div class="c">
+    <div class="kicker">Built for export</div>
+    <h2 class="h2" style="margin-bottom:4mm">Packhouse, warehousing <em>&amp; dispatch</em></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3mm">
+      <div class="photo-cap" style="grid-column:span 2"><img src="img/truck-container.jpg" style="height:80mm"><span>Container stuffing at our packhouse dock</span></div>
+      <div class="photo-cap"><img src="img/bagging.jpg" style="height:52mm"><span>Grading &amp; bagging</span></div>
+      <div class="photo-cap"><img src="img/warehouse.jpg" style="height:52mm"><span>Covered warehouse</span></div>
+      <div class="photo-cap"><img src="img/packhouse.jpg" style="height:52mm"><span>De-husking floor</span></div>
+      <div class="photo-cap"><img src="img/copra-drying.jpg" style="height:52mm"><span>Copra drying yard</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:4mm">
+      <div class="note" style="margin:0"><b>Year-round supply</b>Coconut palms bear fruit all year, so we ship whole coconuts 365 days a year.</div>
+      <div class="note" style="margin:0"><b>Own logistics</b>Our in-house logistics team moves goods from grove to packhouse to port.</div>
+      <div class="note" style="margin:0"><b>Export ports</b>Cocopeat ships via Tuticorin; other ports on request.</div>
+    </div>
+  </div>
+  <div class="bot"><span>FreshNet Farms · Coconut Product Catalogue</span><span class="pn">21</span></div>
+</section>
+
+<!-- 22 BACK -->
+<section class="page back">
+  <div class="glow"></div>
+  <img class="logo" src="img/logo-light.png" alt="FreshNet Farms">
+  <div class="cta">
+    <h2>Let’s grow <em>global markets</em><br>together.</h2>
+    <p>Request samples, full specification sheets or a quotation — we’ll tailor grade, packing and labelling to your market.</p>
+  </div>
+  <div class="sites">
+    <div class="site"><b>Corporate office</b><p>No. 4, Palladam Road, LIG Colony, Kerala Samajam, Pollachi – 642002</p></div>
+    <div class="site"><b>Coconut export packhouse</b><p>Kallipatti Village, Negamum Road, Pollachi Taluk, Coimbatore – 642120</p><div class="ph">+91 98851 01870</div></div>
+    <div class="site"><b>Coconut processing unit</b><p>3/160, G. Kolanthaisamy Layout, Thinnakalani, Peddatalapalli, Krishnagiri, Tamil Nadu – 635001</p><div class="ph">+91 80724 03024</div></div>
+  </div>
+  <div class="contact">
+    <div><svg><use href="#i-mail"/></svg><div><small>Email us</small><span>freshnetfarms@gmail.com</span></div></div>
+    <div><svg><use href="#i-phone"/></svg><div><small>Call us</small><span>+91 98851 01870</span></div></div>
+  </div>
+  <div class="reg"><span>IEC <b>AADCF6524G</b></span><span>CIN <b>U70109TZ2019PTC031705</b></span></div>
+  <div class="credits" id="credits"><b>Photo credits</b> — All operations, whole-coconut, copra, sprout, oil cake, testa oil and coir photos: FreshNet Farms. Wikimedia Commons: coconut oil — Tiia Monto (CC BY-SA 4.0); coconut milk — S Sepp (CC BY-SA 3.0); coconut milk powder, coconut sugar &amp; coconut flour — Valenzuela400 (CC BY-SA 4.0); coconut flakes — Fumikas Sagisavas (CC0); tender coconut water — Avinash N Kulal (CC BY-SA 4.0). Photos cropped. Licences: creativecommons.org/licenses.</div>
+  <div class="strip"></div>
+</section>
+</body>
+</html>
