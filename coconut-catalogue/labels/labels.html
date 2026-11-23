@@ -1,0 +1,92 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Fraunces";src:url(../fonts/fraunces.woff2) format("woff2");font-weight:300 900}
+@font-face{font-family:"Fraunces";src:url(../fonts/fraunces-italic.woff2) format("woff2");font-weight:300 900;font-style:italic}
+@font-face{font-family:"Jakarta";src:url(../fonts/jakarta.woff2) format("woff2");font-weight:300 800}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#888;padding:20px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.lb{position:relative;overflow:hidden;font-family:Jakarta;color:#2B170B;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.cream{background:#FBF6EC}
+.cocoa{background:#3A2010;color:#F8F2E7}
+.lb .logo{display:block}
+.name{font-family:Fraunces;font-weight:600;line-height:.95;letter-spacing:-.01em}
+.name em{font-style:italic;font-weight:500;color:#3E6A1F}
+.cocoa .name em{color:#E2A42B}
+.tag{letter-spacing:.24em;text-transform:uppercase;font-weight:800}
+.bar{position:absolute;left:0;right:0;height:5%;background:linear-gradient(90deg,#8AB43F 0 55%,#E2A42B 55% 75%,#7A4A22 75%)}
+.leaf{color:#3E6A1F}
+.fine{font-size:.7em;letter-spacing:.06em;opacity:.8}
+</style></head><body>
+
+<!-- oil bottle 906x1152 -->
+<div class="lb cream" id="oil" style="width:906px;height:1152px;padding:70px 60px">
+  <img class="logo" src="../img/logo.png" style="width:560px;margin-bottom:60px">
+  <div class="tag leaf" style="font-size:30px;margin-bottom:26px">Pure · Food grade</div>
+  <div class="name" style="font-size:150px">Coconut<br><em>Oil</em></div>
+  <div style="width:180px;height:4px;background:#8AB43F;margin:46px 0 34px"></div>
+  <div class="tag" style="font-size:26px;color:#7A4A22">Cold pressed · Product of India</div>
+  <div class="bar" style="bottom:0"></div>
+</div>
+
+<!-- testa tall 534x1706 -->
+<div class="lb cream" id="testa" style="width:534px;height:1706px;padding:80px 40px">
+  <img class="logo" src="../img/logo.png" style="width:430px;margin-bottom:90px">
+  <div class="tag leaf" style="font-size:24px;margin-bottom:30px">Virgin grade</div>
+  <div class="name" style="font-size:112px">Coconut<br><em>Testa</em><br>Oil</div>
+  <div style="width:140px;height:4px;background:#8AB43F;margin:60px 0 40px"></div>
+  <div class="tag" style="font-size:22px;color:#7A4A22;line-height:1.8">Cold pressed<br>Rich in vitamin E</div>
+  <div class="tag" style="font-size:19px;color:#7A4A22;margin-top:110px;opacity:.8">Product of India</div>
+  <div class="bar" style="bottom:0;height:3%"></div>
+  <div class="bar" style="top:0;height:1.2%"></div>
+</div>
+
+<!-- can 1662x1906 (visible half of wrap) -->
+<div class="lb cocoa" id="can" style="width:1662px;height:1906px;padding:120px 160px">
+  <img class="logo" src="../img/logo-light.png" style="width:900px;margin-bottom:90px">
+  <div class="name" style="font-size:300px">Coconut<br><em>Milk</em></div>
+  <div style="width:300px;height:8px;background:#8AB43F;margin:80px 0 60px"></div>
+  <div class="tag" style="font-size:52px;color:#E9DCC6">No added preservative</div>
+  <div class="tag" style="font-size:44px;color:#C9B79E;margin-top:28px">Product of India</div>
+  <div class="bar" style="bottom:0;height:4%"></div>
+  <div class="bar" style="top:0;height:2.4%"></div>
+</div>
+
+<!-- jar band 1517x718 -->
+<div class="lb cream" id="jar" style="width:1517px;height:718px;flex-direction:row;gap:70px;padding:40px 140px">
+  <img class="logo" src="../img/logo.png" style="width:480px">
+  <div style="width:4px;height:60%;background:#8AB43F"></div>
+  <div style="text-align:left">
+    <div class="tag leaf" style="font-size:30px;margin-bottom:18px">Cold pressed</div>
+    <div class="name" style="font-size:116px">Virgin<br><em>Coconut Oil</em></div>
+    <div class="tag" style="font-size:24px;color:#7A4A22;margin-top:22px">No heat · No chemicals</div>
+  </div>
+  <div class="bar" style="bottom:0;height:7%"></div>
+</div>
+
+<!-- powder box front 1325x447 -->
+<div class="lb" id="box" style="width:1325px;height:447px;background:#fff;flex-direction:row;gap:56px;padding:30px 70px">
+  <img class="logo" src="../img/logo.png" style="width:400px">
+  <div style="width:4px;height:62%;background:#8AB43F"></div>
+  <div style="text-align:left">
+    <div class="name" style="font-size:92px">Coconut<br><em>Milk Powder</em></div>
+    <div class="tag" style="font-size:22px;color:#7A4A22;margin-top:16px">Spray dried · Instant · Vegan</div>
+  </div>
+  <div class="bar" style="bottom:0;height:9%"></div>
+</div>
+
+<!-- flour tube 1150x1040 -->
+<div class="lb cream" id="flour" style="width:1150px;height:1040px;padding:60px 80px">
+  <img class="logo" src="../img/logo.png" style="width:620px;margin-bottom:56px">
+  <div class="tag leaf" style="font-size:32px;margin-bottom:22px">Gluten-free · Grain-free</div>
+  <div class="name" style="font-size:156px">Coconut<br><em>Flour</em></div>
+  <div class="tag" style="font-size:26px;color:#7A4A22;margin-top:40px">Product of India</div>
+  <div class="bar" style="bottom:0;height:5%"></div>
+</div>
+
+<!-- carton stamp 1000x560 (transparent) -->
+<div class="lb" id="stamp" style="width:1000px;height:560px;background:transparent;color:#3a2a1a">
+  <img class="logo" src="../img/logo.png" style="width:760px;filter:grayscale(1) brightness(.35) contrast(1.3)">
+  <div class="tag" style="font-size:40px;margin-top:26px;color:#2a1d12">Product of India</div>
+</div>
+</body></html>
