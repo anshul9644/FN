@@ -36,7 +36,7 @@ def cylinder(label, arc_deg, sag=0.0):
     return cv2.remap(label, mapx, mapy, cv2.INTER_CUBIC, borderMode=cv2.BORDER_CONSTANT)
 
 
-def place(photo, label, quad, arc=0, shade=0.7, gloss=0.5, edge_dark=0.25, keep=None, sag=0.0):
+def place(photo, label, quad, arc=0, shade=0.7, gloss=0.5, edge_dark=0.25, keep=None, sag=0.0, clip=None, lr=(0.8, 1.15)):
     H, W = photo.shape[:2]
     q = np.float32([[x * W, y * H] for x, y in quad])
     if arc:
@@ -55,7 +55,7 @@ def place(photo, label, quad, arc=0, shade=0.7, gloss=0.5, edge_dark=0.25, keep=
     k = max(W, H) / 14
     low = cv2.GaussianBlur(gray, (0, 0), k)
     ref = np.median(low[m]) if m.any() else 128
-    light = np.clip((low / ref), 0.8, 1.15) ** shade
+    light = np.clip((low / ref), lr[0], lr[1]) ** shade
     # darken toward cylinder edges
     if arc:
         xs = np.linspace(-1, 1, lw, dtype=np.float32)
@@ -73,6 +73,11 @@ def place(photo, label, quad, arc=0, shade=0.7, gloss=0.5, edge_dark=0.25, keep=
     noise = cv2.GaussianBlur(np.random.normal(0, 3.2, lab.shape).astype(np.float32), (0, 0), 0.6)
     lab = np.clip(cv2.GaussianBlur(lab, (0, 0), 0.55) + noise, 0, 255)
 
+    if clip is not None:          # keep the label inside the container outline
+        cm = np.zeros((H, W), np.float32)
+        cv2.fillPoly(cm, [np.int32([[x * W, y * H] for x, y in clip])], 1.0)
+        cm = cv2.erode(cm, np.ones((3, 3), np.uint8))
+        a = a * cv2.GaussianBlur(cm, (0, 0), 0.9)[:, :, None]
     if keep is not None:          # pixels that stay in front (e.g. a thumb)
         a = a * (1 - keep[:, :, None])
     out = photo.astype(np.float32) * (1 - a) + lab * a
@@ -96,20 +101,44 @@ def save(name, im, q=92):
 L = lambda n: load(f"{LAB}/{n}.png")
 P = lambda n: cv2.imread(f"{SRC}/{n}.jpg")
 
-# coconut oil: flat PET bottle
+# coconut oil: PET bottle, label clipped to the bottle body
+OIL_Q = [(.421, .392), (.668, .392), (.668, .637), (.421, .637)]
+OIL_C = [(.4235, .390), (.6655, .390), (.6655, .640), (.4235, .640)]
 im = P("kaleeswari")
-im = place(im, L("oil"), [(.424, .398), (.667, .398), (.667, .632), (.424, .632)], arc=38, shade=.6, gloss=.35, edge_dark=.18)
+im = place(im, L("oil"), OIL_Q, arc=38, shade=.6, gloss=.3, edge_dark=.22, sag=.012, clip=OIL_C)
 save("brand-oil.jpg", im)
 
-# virgin coconut oil: glass jar, label band
-im = P("jar")
-im = place(im, L("jar"), [(.093, .600), (.889, .590), (.886, .950), (.096, .955)], arc=62, shade=.85, gloss=.35, edge_dark=.4, sag=.07)
-save("brand-vco.jpg", im)
+# MCT oil: same bottle style, mirrored scene, own label
+im = cv2.flip(P("kaleeswari"), 1)
+mirror = lambda pts: [(1 - x, y) for x, y in pts]
+q = mirror(OIL_Q); q = [q[1], q[0], q[3], q[2]]
+c = mirror(OIL_C)
+im = place(im, L("mct"), q, arc=38, shade=.6, gloss=.3, edge_dark=.22, sag=.012, clip=c)
+H = im.shape[0]
+save("brand-mct.jpg", im[int(.08 * H):int(.92 * H), :])
 
-# coconut milk: tin can
+
+
+# coconut milk: tin can, label clipped to the can outline
 im = P("can")
-im = place(im, L("can"), [(.008, .398), (.454, .398), (.454, .780), (.008, .780)], arc=68, shade=.85, gloss=.3, edge_dark=.5, sag=.055)
+CAN_C = [(.032, .412), (.42, .405), (.44, .55), (.448, .70), (.44, .755), (.40, .778), (.30, .792), (.18, .792),
+         (.10, .780), (.065, .745), (.045, .66), (.035, .55)]
+im = place(im, L("can"), [(.02, .40), (.46, .40), (.46, .80), (.02, .80)], arc=68, shade=.85, gloss=.3,
+           edge_dark=.5, sag=.05, clip=CAN_C)
 save("brand-milk.jpg", im)
+
+# coconut butter: glass jar from FreshNet's listing, label replaced
+im = P("butterjar")
+BUT_C = [(.026, .288), (.974, .288), (.974, .872), (.026, .872)]
+im = place(im, L("butter"), [(.02, .286), (.98, .286), (.98, .874), (.02, .874)], arc=60, shade=.6, gloss=.25,
+           edge_dark=.35, sag=.01, clip=BUT_C)
+save("brand-butter.jpg", im)
+
+# virgin coconut oil: same jar style, cream label
+im = P("butterjar")
+im = place(im, L("vco2"), [(.02, .286), (.98, .286), (.98, .874), (.02, .874)], arc=60, shade=.6, gloss=.25,
+           edge_dark=.3, sag=.01, clip=BUT_C)
+save("brand-vco.jpg", im)
 
 # coconut milk powder: clear box, front label
 im = P("powderbox")
@@ -134,7 +163,8 @@ save("brand-flour.jpg", im[int(.16 * H):, :])
 # testa oil: FreshNet's own photo, keep the thumb in front
 im = P("testa")
 keep = skin_mask(im, .5)
-im = place(im, L("testa"), [(.205, .268), (.577, .268), (.587, .936), (.233, .936)], arc=40, shade=.55, gloss=.45, edge_dark=.2, keep=keep)
+TES_C = [(.207, .25), (.583, .25), (.598, .90), (.59, .93), (.57, .945), (.25, .945), (.232, .93), (.224, .90)]
+im = place(im, L("testa"), [(.208, .262), (.580, .262), (.594, .936), (.226, .936)], clip=TES_C, arc=40, shade=.55, gloss=.45, edge_dark=.2, keep=keep)
 save("brand-testa.jpg", im)
 
 # coconut sugar: logo branded (burnt) onto the wooden spoon handle
