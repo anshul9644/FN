@@ -236,3 +236,28 @@ gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY).astype(np.float32)
 im = finish(lab, im, a, sh, gloss=.15, grain=2.2)
 save("brand-milk.jpg", im)
 print("can done")
+
+# ---------------------------------------------------------------- coconut flour tube
+im = cv2.imread(f"{SRC}/flourbag.jpg")
+H, W = im.shape[:2]
+lab_im = L("flour")
+h0, w0 = lab_im.shape[:2]
+pad = int(.08 * h0)
+lab_im = cv2.copyMakeBorder(lab_im, pad, pad, 0, 0, cv2.BORDER_CONSTANT, value=0)
+xn = np.linspace(-1, 1, w0)
+off = (.05 * h0 * (1 - xn ** 2)).astype(np.float32)
+mapy = (np.arange(lab_im.shape[0], dtype=np.float32)[:, None] - off[None, :]).astype(np.float32)
+lab_im = cv2.remap(lab_im, np.tile(np.arange(w0, dtype=np.float32), (lab_im.shape[0], 1)), mapy, cv2.INTER_CUBIC)
+lab, a, M, ls = warp_label(lab_im, [(.165, .36), (.655, .36), (.69, .64), (.19, .64)], (H, W), arc=58)
+sh = column_shading(im, a, M, ls, edge=0, strength=.3)
+xg = np.linspace(-1, 1, ls[0])
+prof = (1 - .42 * np.abs(xg) ** 2.4) + .14 * np.exp(-((xg + .30) / .18) ** 2)
+grid = np.zeros((ls[1], ls[0]), np.float32) + prof[None, :].astype(np.float32)
+cyl = cv2.warpPerspective(grid, M, (W, H), flags=cv2.INTER_LINEAR)
+sh = sh * np.where(cyl > 0, cyl, 1)
+# soft contact shadow just outside the sticker edge (paper thickness)
+edge = cv2.GaussianBlur(a, (0, 0), 3) - a
+im = (im.astype(np.float32) * (1 - .25 * np.clip(edge, 0, 1)[:, :, None])).astype(np.uint8)
+im = finish(lab, im, a, sh, gloss=.35, grain=2.4)
+save("brand-flour.jpg", im[int(.16 * H):, :])
+print("flour done")
