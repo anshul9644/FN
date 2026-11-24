@@ -1,4 +1,4 @@
-"""Coconut milk can packshot: real blank steel can (Wikimedia, Sun Ladder, CC BY 3.0),
+"""Coconut milk can packshot: real blank steel can (Wikimedia, Sun Ladder, CC BY-SA 3.0),
 FreshNet label wrapped pixel-by-pixel around the cylinder, pressed lid added."""
 import sys
 import numpy as np
