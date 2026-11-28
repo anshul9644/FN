@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FreshNet Farms QR code</title>
+<style>
+@font-face{font-family:"Fraunces";src:url(fonts/fraunces.woff2) format("woff2");font-weight:300 900;font-style:normal}
+@font-face{font-family:"Fraunces";src:url(fonts/fraunces-italic.woff2) format("woff2");font-weight:300 900;font-style:italic}
+@font-face{font-family:"Jakarta";src:url(fonts/jakarta.woff2) format("woff2");font-weight:300 800}
+:root{--cocoa:#2B170B;--brown:#603913;--green:#89AC3F;--cream:#F7F3EA}
+@page{size:A4;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Jakarta",sans-serif;color:var(--cocoa);background:#fff}
+.page{width:210mm;height:297mm;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;page-break-after:always}
+.page:last-child{page-break-after:auto}
+
+/* page 1: branded */
+.brand{background:var(--cream)}
+.bar{position:absolute;left:0;right:0;height:7mm}
+.bar.top{top:0;background:var(--brown)}
+.bar.bottom{bottom:0;background:var(--green)}
+.logo{width:92mm;margin-top:30mm}
+.kicker{margin-top:16mm;font-size:10.5pt;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--green)}
+h1{margin-top:4mm;font-family:"Fraunces",serif;font-weight:500;font-size:34pt;line-height:1.1;text-align:center;color:var(--brown)}
+h1 em{font-style:italic;font-weight:400}
+.card{margin-top:12mm;background:#fff;border-radius:7mm;padding:6mm;box-shadow:0 0 0 .35mm rgba(96,57,19,.18)}
+.qr{position:relative;width:118mm;height:118mm}
+.qr img.code{width:100%;height:100%;display:block}
+.mark{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:27mm;height:27mm;background:#fff;border-radius:3.2mm;display:flex;align-items:center;justify-content:center}
+.mark img{width:25mm;height:25mm}
+.url{margin-top:11mm;font-family:"Fraunces",serif;font-weight:600;font-size:30pt;color:var(--brown);letter-spacing:.01em}
+.sub{margin-top:3mm;font-size:11pt;color:#6b5a4b}
+
+/* page 2: plain code for packaging / small print */
+.plain{justify-content:center}
+.plain .qr{width:150mm;height:150mm}
+.plain .url{margin-top:8mm;font-size:24pt}
+.plain .note{margin-top:4mm;font-size:9.5pt;color:#8a7a6b;text-align:center;max-width:150mm;line-height:1.5}
+</style>
+</head>
+<body>
+<section class="page brand">
+  <div class="bar top"></div>
+  <img class="logo" src="img/logo.png" alt="FreshNet Farms">
+  <div class="kicker">Pollachi, India · Coconut exporter</div>
+  <h1>Scan to visit <em>our website</em></h1>
+  <div class="card">
+    <div class="qr">
+      <img class="code" src="qr-logo.svg" alt="QR code for https://freshnet.in">
+      <div class="mark"><img src="img/fn-mark.png" alt=""></div>
+    </div>
+  </div>
+  <div class="url">freshnet.in</div>
+  <div class="sub">Coconut · Copra · Cocopeat · Coconut shell</div>
+  <div class="bar bottom"></div>
+</section>
+<section class="page plain">
+  <div class="qr"><img class="code" src="qr-plain.svg" alt="QR code for https://freshnet.in"></div>
+  <div class="url">freshnet.in</div>
+  <div class="note">Plain version for packaging, labels and visiting cards. Keep the white border around the code, and print it at least 2&nbsp;cm wide.</div>
+</section>
+</body>
+</html>
